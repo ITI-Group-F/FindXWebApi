@@ -2,8 +2,8 @@
 using MongoDbGenericRepository.Attributes;
 namespace FindX.WebApi.Model
 {
-    [CollectionName("Users")]
-    public class ApplicationUser : MongoDbIdentityUser
-    {
-    }
+	[CollectionName("users")]
+	public class ApplicationUser : MongoIdentityUser<Guid>
+	{
+	}
 }

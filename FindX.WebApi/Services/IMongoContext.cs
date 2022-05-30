@@ -1,4 +1,5 @@
-﻿using MongoDB.Driver;
+﻿using FindX.WebApi.Model;
+using MongoDB.Driver;
 
 namespace FindX.WebApi.Services
 {
@@ -6,6 +7,6 @@ namespace FindX.WebApi.Services
 	{
 		public IMongoDatabase Database { get; }
 		public IMongoCollection<Item> Items { get; }
-		public IMongoCollection<User> Users { get; }
+		public IMongoCollection<ApplicationUser> Users { get; }
 	}
 }
