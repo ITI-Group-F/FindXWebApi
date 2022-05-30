@@ -13,7 +13,7 @@ namespace FindX.WebApi.Services
 		{
 			Database = client.GetDatabase(_databaseName);
 			Items = Database.GetCollection<Item>("items");
-			Users = Database.GetCollection<User>("items");
+			Users = Database.GetCollection<User>("users");
 		}
 	}
 }

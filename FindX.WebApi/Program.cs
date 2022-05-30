@@ -35,6 +35,11 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
+app.UseEndpoints(endpoints =>
+{
+	endpoints.MapHealthChecks("/health");
+});
+
 app.MapControllers();
 
 app.Run();
