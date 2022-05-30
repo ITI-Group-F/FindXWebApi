@@ -1,10 +1,12 @@
 ﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace FindX.WebApi.Model
 {
     public class Item
     {
-        public ObjectId _id { get; set; }
+        [BsonId]
+        public Guid id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public BsonDateTime Date { get; set; }
