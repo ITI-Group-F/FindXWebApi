@@ -1,12 +1,13 @@
 ﻿using FindX.WebApi.Model;
 using MongoDB.Driver;
 
+
 namespace FindX.WebApi.Services
 {
-	public interface IMongoContext
-	{
-		public IMongoDatabase Database { get; }
-		public IMongoCollection<Item> Items { get; }
-		public IMongoCollection<ApplicationUser> Users { get; }
-	}
+    public interface IMongoContext
+    {
+        public IMongoDatabase Database { get; }
+        public IMongoCollection<Item> Items { get; }
+        public IMongoCollection<User> Users { get; }
+    }
 }
