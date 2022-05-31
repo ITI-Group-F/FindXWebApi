@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-
+using MongoDB.Driver;
+using FindX.WebApi.Model;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace FindX.WebApi.Controllers
@@ -8,11 +9,25 @@ namespace FindX.WebApi.Controllers
     [ApiController]
     public class TestController : ControllerBase
     {
+        public IMongoDatabase _database;
+        private readonly FilterDefinitionBuilder<Item> _filterBuilder = Builders<Item>.Filter;
+        public IMongoCollection<Item> Items { get; private set; }
+
+        public TestController(IMongoClient client)
+        {
+            _database = client.GetDatabase("FindX");
+            Items = _database.GetCollection<Item>("items");
+
+        }
         // GET: api/<TestController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IActionResult Get()
         {
-            return new string[] { "value1", "value2" };
+            var filter = _filterBuilder.Eq(i => i._id, new MongoDB.Bson.ObjectId("629535ec8b6d0a45f16808fa"));
+
+
+
+            return Ok(Items.Find(filter).SingleOrDefault());
         }
 
         // GET api/<TestController>/5
