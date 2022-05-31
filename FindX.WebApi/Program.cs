@@ -1,8 +1,8 @@
 using FindX.WebApi.Extenstions;
-using FindX.WebApi.Settings;
-using FindX.WebApi.Model;
 using Serilog;
-using Microsoft.Extensions.DependencyInjection;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Serializers;
+using MongoDB.Bson;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,13 +11,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 #region Custom Services
-
 builder.ConfigureAppSettings();
 builder.ConfigureSerilog();
+BsonSerializer.RegisterSerializer(new GuidSerializer(BsonType.String));
 builder.Host.UseSerilog();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.RegisterMongoDb();
-
 #endregion
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -34,11 +33,6 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
-
-app.UseEndpoints(endpoints =>
-{
-	endpoints.MapHealthChecks("/health");
-});
 
 app.MapControllers();
 
