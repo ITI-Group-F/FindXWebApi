@@ -17,6 +17,7 @@ BsonSerializer.RegisterSerializer(new GuidSerializer(BsonType.String));
 builder.Host.UseSerilog();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.RegisterMongoDb();
+builder.RegisterServices();
 #endregion
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

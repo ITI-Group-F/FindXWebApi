@@ -9,5 +9,6 @@ namespace FindX.WebApi.Services
 		public IMongoCollection<Item> Items { get; }
 		public IMongoCollection<ApplicationUser> Users { get; }
 		public IMongoCollection<SuperCategory> SuperCategories { get; }
+		public IMongoCollection<SuperCategory> SubCategories { get; }
 	}
 }

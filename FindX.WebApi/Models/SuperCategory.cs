@@ -4,7 +4,7 @@ using MongoDbGenericRepository.Attributes;
 
 namespace FindX.WebApi.Model
 {
-	[CollectionName("superCategory")]
+	[CollectionName("superCategories")]
 	public class SuperCategory : ICategory
 	{
 		public Guid Id { get; set; }

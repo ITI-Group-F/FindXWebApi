@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
 using FindX.WebApi.Model;
+using FindX.WebApi.Repositories;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace FindX.WebApi.Controllers
@@ -13,20 +14,24 @@ namespace FindX.WebApi.Controllers
 		private readonly FilterDefinitionBuilder<Item> _filterBuilder = Builders<Item>.Filter;
 		public IMongoCollection<Item> Items { get; private set; }
 
-		public TestController(IMongoClient client)
+		private readonly IItemRepository _itemRepository;
+
+		public TestController(IMongoClient client, IItemRepository itemRepository)
 		{
 			_database = client.GetDatabase("FindX");
 			Items = _database.GetCollection<Item>("items");
-
+			_itemRepository = itemRepository;
 		}
 		// GET: api/<TestController>
 		[HttpGet]
-		public IActionResult Get()
+		public async Task<ActionResult> Get()
 		{
-			var filter = _filterBuilder.Eq(i => i.Id, new Guid("b9d045f3-b4f3-4921-b33f-b13dfc6e9559"));
-			var result = Items.Find(filter).SingleOrDefault();
+			//var filter = _filterBuilder.Eq(i => i.Id, new Guid("b9d045f3-b4f3-4921-b33f-b13dfc6e9559"));
+			//var result = Items.Find(filter).SingleOrDefault();
 
-			return Ok(result);
+			Items.InsertOne(new Item());
+			var reuslt = await _itemRepository.GetAllItemsAsync();
+			return Ok(reuslt);
 		}
 
 		// GET api/<TestController>/5
