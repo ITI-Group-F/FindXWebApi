@@ -17,7 +17,6 @@ namespace FindX.WebApi.Model
 		public ICollection<string> Images { get; set; } = new HashSet<string>();
 
 		public Guid UserId { get; set; }
-
-		public ICategory[] categories { get; set; }
+		public Guid SubCategoryId { get; set; }
 	}
 }

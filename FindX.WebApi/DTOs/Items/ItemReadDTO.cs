@@ -2,9 +2,8 @@
 
 namespace FindX.WebApi.DTOs
 {
-    public class ItemReadDTO
-    {
-		
+	public class ItemReadDTO
+	{
 		public string Title { get; set; }
 		public string Description { get; set; }
 		public DateTime Date { get; set; }
@@ -12,8 +11,7 @@ namespace FindX.WebApi.DTOs
 		public bool IsLost { get; set; }
 		public ICollection<string> Images { get; set; } = new HashSet<string>();
 
-		public Guid UserId { get; set; }
-
-		public ICategory[] categories { get; set; }
+		public ApplicationUser User { get; set; }
+		public SuperCategory SubCategory { get; set; }
 	}
 }

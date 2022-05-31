@@ -9,6 +9,5 @@ namespace FindX.WebApi.Model
 	{
 		public Guid Id { get; set; }
 		public string Title { get; set; }
-		public ICategory[] Subcategories { get; set; }
 	}
 }
