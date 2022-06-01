@@ -14,14 +14,17 @@ namespace FindX.WebApi.Repositories
 			_context = context;
 		}
 
-		public Task CreateItemAsync(Guid userId, Item item)
+		public async Task CreateItemAsync(Guid userId, Item item)
 		{
-			throw new NotImplementedException();
+			item.UserId = userId;
+            await _context.Items.InsertOneAsync(item);
+            
 		}
 
-		public Task DeleteItemAsync(Guid userId, Guid itemId)
+		public Task DeleteItemAsync(Guid itemId)
 		{
-			throw new NotImplementedException();
+            var filter = Builders<Item>.Filter.Eq(x => x.Id, itemId);
+            return _context.Items.DeleteOneAsync(filter);
 		}
 
 		public async Task<IEnumerable<Item>> GetAllItemsAsync()
@@ -30,24 +33,31 @@ namespace FindX.WebApi.Repositories
 				.Find(new BsonDocument()).ToListAsync();
 		}
 
-		public Task<IEnumerable<Item>> GetItemsForUserAsync(Guid userId)
+		public async Task<IEnumerable<Item>> GetItemsForUserAsync(Guid userId)
 		{
-			throw new NotImplementedException();
+            var filter = Builders<Item>.Filter.Eq(x => x.UserId, userId);
+            
+            
+            return await _context.Items.Find(filter).ToListAsync();
+            
 		}
 
-		public Task<bool> IsUserExist(Guid userId)
+		public Task<bool> IsUserExist(Guid userId) //item repository ??
 		{
-			throw new NotImplementedException();
+            //if not equal null return true
+            var filter = Builders<Item>.Filter.Eq(x => x.UserId, userId);
+
+            return filter == null ? Task.FromResult(false) : Task.FromResult(true);
+        
 		}
 
-		public Task<bool> SaveChangesAsync()
-		{
-			throw new NotImplementedException();
-		}
+		
 
-		public Task UpdateItemAsync(Guid userId, Item item)
+		public async Task UpdateItemAsync(Guid userId, Item item)
 		{
-			throw new NotImplementedException();
-		}
+
+            var filter = Builders<Item>.Filter.Eq(x => x.UserId, userId);
+             await _context.Items.ReplaceOneAsync(filter, item);
+        }
 	}
 }
