@@ -1,4 +1,5 @@
 ﻿using FindX.WebApi.Model;
+using FindX.WebApi.Models;
 using MongoDB.Driver;
 
 namespace FindX.WebApi.Services
@@ -9,6 +10,6 @@ namespace FindX.WebApi.Services
 		public IMongoCollection<Item> Items { get; }
 		public IMongoCollection<ApplicationUser> Users { get; }
 		public IMongoCollection<SuperCategory> SuperCategories { get; }
-		public IMongoCollection<SuperCategory> SubCategories { get; }
+		public IMongoCollection<SubCategory> SubCategories { get; }
 	}
 }

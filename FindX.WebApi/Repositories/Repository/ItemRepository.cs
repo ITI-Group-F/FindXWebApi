@@ -1,7 +1,8 @@
-﻿using FindX.WebApi.Extenstions;
-using FindX.WebApi.Model;
+﻿using FindX.WebApi.Model;
+using FindX.WebApi.Models;
 using FindX.WebApi.Models.Populated;
 using FindX.WebApi.Services;
+using Microsoft.EntityFrameworkCore;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
@@ -12,6 +13,7 @@ namespace FindX.WebApi.Repositories
 		private readonly IMongoContext _context;
 		private readonly FilterDefinitionBuilder<Item> _itemFilterBuilder = Builders<Item>.Filter;
 		private readonly FilterDefinitionBuilder<ApplicationUser> _userFilterBuilder = Builders<ApplicationUser>.Filter;
+		private readonly FilterDefinitionBuilder<SubCategory> _filterBuilder = Builders<SubCategory>.Filter;
 
 		public ItemRepository(IMongoContext context)
 		{
@@ -20,6 +22,10 @@ namespace FindX.WebApi.Repositories
 
 		public async Task CreateItemAsync(Guid userId, Item item)
 		{
+			if (item is null)
+			{
+				throw new ArgumentNullException(nameof(item));
+			}
 			item.UserId = userId;
 			await _context.Items.InsertOneAsync(item);
 		}
