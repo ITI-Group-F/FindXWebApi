@@ -1,5 +1,4 @@
 ﻿using FindX.WebApi.Model;
-using FindX.WebApi.Models;
 using FindX.WebApi.Models.Populated;
 using FindX.WebApi.Services;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +12,6 @@ namespace FindX.WebApi.Repositories
 		private readonly IMongoContext _context;
 		private readonly FilterDefinitionBuilder<Item> _itemFilterBuilder = Builders<Item>.Filter;
 		private readonly FilterDefinitionBuilder<ApplicationUser> _userFilterBuilder = Builders<ApplicationUser>.Filter;
-		private readonly FilterDefinitionBuilder<SubCategory> _filterBuilder = Builders<SubCategory>.Filter;
 
 		public ItemRepository(IMongoContext context)
 		{
@@ -65,25 +63,52 @@ namespace FindX.WebApi.Repositories
 			await _context.Items.ReplaceOneAsync(filter, item);
 		}
 
-		private async Task<IEnumerable<PopulatedItems>> GetPopulatedItemsQueryAsync()
+		private async Task<IEnumerable<PopulatedItems>> GetPopulatedItemsAsync(Guid userId = default)
 		{
-			var qry = from item in _context.Items.AsQueryable()
-								join user in _context.Users.AsQueryable()
-									on item.UserId equals user.Id
-								select new PopulatedItems
-								{
-									Id = item.Id,
-									Title = item.Title,
-									Description = item.Description,
-									Date = item.Date,
-									Location = item.Location,
-									IsLost = item.IsLost,
-									IsClosed = item.IsClosed,
-									Images = item.Images,
-									User = user,
-									SubCategoryId = item.SubCategoryId,
-								};
-			return await qry.ToListAsync();
+			IQueryable<PopulatedItems>? query = null;
+			if (userId == default)
+			{
+				query =
+					from item in _context.Items.AsQueryable()
+					join user in _context.Users.AsQueryable()
+						on item.UserId equals user.Id
+					select new PopulatedItems
+					{
+						Id = item.Id,
+						Title = item.Title,
+						Description = item.Description,
+						Date = item.Date,
+						Location = item.Location,
+						IsLost = item.IsLost,
+						IsClosed = item.IsClosed,
+						Images = item.Images,
+						User = user,
+						SubCategoryId = item.SubCategoryId,
+					};
+			}
+			else
+			{
+				query =
+					from item in _context.Items.AsQueryable()
+					join user in _context.Users.AsQueryable()
+						on item.UserId equals user.Id
+					where user.Id == userId
+					select new PopulatedItems
+					{
+						Id = item.Id,
+						Title = item.Title,
+						Description = item.Description,
+						Date = item.Date,
+						Location = item.Location,
+						IsLost = item.IsLost,
+						IsClosed = item.IsClosed,
+						Images = item.Images,
+						User = user,
+						SubCategoryId = item.SubCategoryId,
+					};
+			}
+
+			return await query.ToListAsync();
 		}
 	}
 }
