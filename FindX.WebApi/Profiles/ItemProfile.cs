@@ -3,9 +3,9 @@ using FindX.WebApi.Model;
 
 namespace FindX.WebApi.DTOs.Profiles
 {
-	public class ProfileMapper : Profile
+	public class ItemProfile : Profile
 	{
-		public ProfileMapper()
+		public ItemProfile()
 		{
 			CreateMap<ItemUpdateDTO, Item>();
 			CreateMap<ItemCreateDTO, Item>();

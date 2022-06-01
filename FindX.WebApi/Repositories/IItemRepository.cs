@@ -1,4 +1,5 @@
 ﻿using FindX.WebApi.Model;
+using FindX.WebApi.Models.Populated;
 using System.Collections;
 
 namespace FindX.WebApi.Repositories
