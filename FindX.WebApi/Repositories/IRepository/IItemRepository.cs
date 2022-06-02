@@ -13,5 +13,6 @@ namespace FindX.WebApi.Repositories
 		Task DeleteItemAsync(Guid itemId);
 
 		Task<bool> IsUserExist(Guid userId);
+
 	}
 }
