@@ -1,7 +1,7 @@
-﻿using FindX.WebApi.Model;
+﻿using FindX.WebApi.Extenstions;
+using FindX.WebApi.Models;
 using FindX.WebApi.Models.Populated;
 using FindX.WebApi.Services;
-using Microsoft.EntityFrameworkCore;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
@@ -41,10 +41,9 @@ namespace FindX.WebApi.Repositories
 				.ToListAsync();
 		}
 
-		public async Task<IEnumerable<Item>> GetItemsForUserAsync(Guid userId)
+		public async Task<IEnumerable<PopulatedItem>> GetItemsForUserAsync(Guid userId)
 		{
-			var filter = _itemFilterBuilder.Eq(x => x.UserId, userId);
-			return await _context.Items.Find(filter).ToListAsync();
+			return await GetPopulatedItemsAsync(userId);
 		}
 
 		public async Task<bool> IsUserExist(Guid userId)
@@ -63,51 +62,31 @@ namespace FindX.WebApi.Repositories
 			await _context.Items.ReplaceOneAsync(filter, item);
 		}
 
-		private async Task<IEnumerable<PopulatedItems>> GetPopulatedItemsAsync(Guid userId = default)
+		private async Task<IEnumerable<PopulatedItem>> GetPopulatedItemsAsync(Guid userId)
 		{
-			IQueryable<PopulatedItems>? query = null;
-			if (userId == default)
-			{
-				query =
-					from item in _context.Items.AsQueryable()
-					join user in _context.Users.AsQueryable()
-						on item.UserId equals user.Id
-					select new PopulatedItems
-					{
-						Id = item.Id,
-						Title = item.Title,
-						Description = item.Description,
-						Date = item.Date,
-						Location = item.Location,
-						IsLost = item.IsLost,
-						IsClosed = item.IsClosed,
-						Images = item.Images,
-						User = user,
-						SubCategoryId = item.SubCategoryId,
-					};
-			}
-			else
-			{
-				query =
-					from item in _context.Items.AsQueryable()
-					join user in _context.Users.AsQueryable()
-						on item.UserId equals user.Id
-					where user.Id == userId
-					select new PopulatedItems
-					{
-						Id = item.Id,
-						Title = item.Title,
-						Description = item.Description,
-						Date = item.Date,
-						Location = item.Location,
-						IsLost = item.IsLost,
-						IsClosed = item.IsClosed,
-						Images = item.Images,
-						User = user,
-						SubCategoryId = item.SubCategoryId,
-					};
-			}
-
+			var query =
+				from item in _context.Items.AsQueryable()
+				join user in _context.Users.AsQueryable()
+					on item.UserId equals user.Id
+				where item.UserId == userId
+				join sub in _context.SubCategories.AsQueryable()
+					on item.SubCategoryId equals sub.Id
+				join sup in _context.SuperCategories.AsQueryable()
+					on item.SuperCategoryId equals sup.Id
+				select new PopulatedItem
+				{
+					Id = item.Id,
+					Title = item.Title,
+					Description = item.Description,
+					Date = item.Date,
+					Location = item.Location,
+					IsLost = item.IsLost,
+					IsClosed = item.IsClosed,
+					Images = item.Images,
+					User = user,
+					SubCategory = sub,
+					SuperCategory = sup,
+				};
 			return await query.ToListAsync();
 		}
 	}

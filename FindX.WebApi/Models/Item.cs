@@ -2,7 +2,7 @@
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDbGenericRepository.Attributes;
 
-namespace FindX.WebApi.Model
+namespace FindX.WebApi.Models
 {
 	[CollectionName("items")]
 	public class Item
@@ -18,5 +18,6 @@ namespace FindX.WebApi.Model
 
 		public Guid UserId { get; set; }
 		public Guid SubCategoryId { get; set; }
+		public Guid SuperCategoryId { get; set; }
 	}
 }

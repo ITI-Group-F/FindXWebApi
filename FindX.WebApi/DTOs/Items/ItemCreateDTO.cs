@@ -1,4 +1,4 @@
-﻿using FindX.WebApi.Model;
+﻿using FindX.WebApi.Models;
 
 namespace FindX.WebApi.DTOs
 {

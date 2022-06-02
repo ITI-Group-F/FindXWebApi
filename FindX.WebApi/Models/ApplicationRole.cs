@@ -2,7 +2,7 @@
 using AspNetCore.Identity.MongoDbCore.Models;
 using MongoDbGenericRepository.Attributes;
 
-namespace FindX.WebApi.Model
+namespace FindX.WebApi.Models
 {
 	[CollectionName("roles")]
 	public class ApplicationRole : MongoIdentityRole<Guid>

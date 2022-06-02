@@ -1,8 +1,8 @@
-﻿using FindX.WebApi.Model;
+﻿using FindX.WebApi.Models;
 
 namespace FindX.WebApi.Models.Populated
 {
-	public class PopulatedItems
+	public class PopulatedItem
 	{
 		public Guid Id { get; set; }
 		public string Title { get; set; }
@@ -14,6 +14,7 @@ namespace FindX.WebApi.Models.Populated
 		public ICollection<string> Images { get; set; } = new HashSet<string>();
 
 		public ApplicationUser User { get; set; }
-		public Guid SubCategoryId { get; set; }
+		public SubCategory SubCategory { get; set; }
+		public SuperCategory SuperCategory { get; set; }
 	}
 }

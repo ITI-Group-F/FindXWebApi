@@ -1,7 +1,7 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace FindX.WebApi.Model
+namespace FindX.WebApi.Models
 {
 	public interface ICategory
 	{

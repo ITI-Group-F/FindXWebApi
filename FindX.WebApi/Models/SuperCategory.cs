@@ -2,7 +2,7 @@
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDbGenericRepository.Attributes;
 
-namespace FindX.WebApi.Model
+namespace FindX.WebApi.Models
 {
 	[CollectionName("superCategories")]
 	public class SuperCategory : ICategory

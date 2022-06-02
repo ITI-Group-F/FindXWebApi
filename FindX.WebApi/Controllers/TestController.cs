@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
-using FindX.WebApi.Model;
+using FindX.WebApi.Models;
 using FindX.WebApi.Repositories;
 using Microsoft.AspNetCore.Identity;
 using AutoMapper;
@@ -16,6 +16,8 @@ namespace FindX.WebApi.Controllers
 		public IMongoDatabase _database;
 		private readonly FilterDefinitionBuilder<Item> _filterBuilder = Builders<Item>.Filter;
 		public IMongoCollection<Item> Items { get; private set; }
+		public IMongoCollection<SubCategory> Sub { get; }
+		public IMongoCollection<SuperCategory> Sup { get; }
 
 		private readonly IItemRepository _itemRepository;
 		private readonly UserManager<ApplicationUser> _userManager;
@@ -28,6 +30,8 @@ namespace FindX.WebApi.Controllers
 		{
 			_database = client.GetDatabase("FindX");
 			Items = _database.GetCollection<Item>("items");
+			Sub = _database.GetCollection<SubCategory>("subCategories");
+			Sup = _database.GetCollection<SuperCategory>("superCategories");
 			_itemRepository = itemRepository;
 			_userManager = userManager;
 			_mapper = mapper;
@@ -36,18 +40,8 @@ namespace FindX.WebApi.Controllers
 		[HttpGet]
 		public async Task<ActionResult> Get()
 		{
-			var itm = new Item();
-			var pop = _mapper.Map<PopulatedItems>(itm);
-			//var filter = _filterBuilder.Eq(i => i.Id, new Guid("b9d045f3-b4f3-4921-b33f-b13dfc6e9559"));
-			//var result = Items.Find(filter).SingleOrDefault();
 
-			//var result = await _userManager.CreateAsync(new ApplicationUser() { UserName = "Mohab", Email = "mohab@mail.com", FirstName = "Mohab", LastName = "Alnajjar" }, "Mohab123!");
-			//if (result.Succeeded)
-			//{
-
-			//}
-			//Items.InsertOne(new Item());
-			var reuslt = await _itemRepository.GetAllItemsAsync();
+			var reuslt = await _itemRepository.GetItemsForUserAsync(new Guid("547a8d67-7fa1-414d-b456-33cde2c58cd7"));
 			return Ok(reuslt);
 		}
 

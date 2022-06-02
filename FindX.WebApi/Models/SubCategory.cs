@@ -1,4 +1,4 @@
-﻿using FindX.WebApi.Model;
+﻿using FindX.WebApi.Models;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDbGenericRepository.Attributes;
 
