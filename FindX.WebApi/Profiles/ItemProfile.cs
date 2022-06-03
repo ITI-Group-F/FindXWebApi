@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FindX.WebApi.Models;
+using FindX.WebApi.Models.Populated;
 
 namespace FindX.WebApi.DTOs.Profiles
 {
@@ -10,6 +11,7 @@ namespace FindX.WebApi.DTOs.Profiles
 			CreateMap<ItemUpdateDTO, Item>();
 			CreateMap<ItemCreateDTO, Item>();
 			CreateMap<Item, ItemReadDTO>();
+			CreateMap<PopulatedItem, ItemReadDTO>();
 		}
 	}
 }
