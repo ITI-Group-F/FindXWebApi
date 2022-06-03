@@ -31,8 +31,8 @@ namespace FindX.WebApi.Controllers
 			{
 				return NotFound();
 			}
-
-			return Ok(allItems);
+			
+			return Ok(_mapper.Map<IEnumerable<ItemReadDTO>>(allItems));
 		}
 
 
@@ -70,7 +70,7 @@ namespace FindX.WebApi.Controllers
 		//}
 
 		[HttpPost("{userId}")]
-		public async Task<ActionResult<IEnumerable<ItemCreateDTO>>> PostUserItem(Guid userId, ItemCreateDTO newItem)
+		public async Task<ActionResult<IEnumerable<ItemReadDTO>>> PostUserItem(Guid userId, ItemCreateDTO newItem)
 		{
 			if (userId != newItem.UserId)
 			{
@@ -85,28 +85,30 @@ namespace FindX.WebApi.Controllers
 			var itemModel = _mapper.Map<Item>(newItem);
 			await _itemsRepository.CreateItemAsync(userId, itemModel);
 
-			return Created("Created Successfully", itemModel);
+            return Created("Created Successfully", _mapper.Map<ItemReadDTO>(itemModel));
 
-		}
+
+        }
 
 
 
 
 		//Update or Edit  User  
-		[HttpPut("{userId}")]
-		public async Task<ActionResult<ItemUpdateDTO>> PutUserItem(Guid userId, ItemUpdateDTO newItem)
+		[HttpPut("{userId}/{itemId}")]
+		public async Task<ActionResult<ItemUpdateDTO>> PutUserItem(Guid userId,Guid itemId, ItemUpdateDTO newItem)
 		{
-			if (userId != newItem.UserId)
+			if (userId != newItem.UserId||!ModelState.IsValid)
 			{
 				return BadRequest();
 			}
 
-			if (!ModelState.IsValid)
-			{
-				return BadRequest(ModelState.ValidationState);
 
-			}
+    //        if (!_itemsRepository.IsItemExistFor(userId,itemId))
+    //        {
+				//return NotFound();
 
+    //        }
+		
 
 			var itemModel = _mapper.Map<Item>(newItem);
 			await _itemsRepository.UpdateItemAsync(userId, itemModel);
@@ -116,16 +118,23 @@ namespace FindX.WebApi.Controllers
 		}
 
 
-		//this for Delete a Specific  Item For Specific User but Still under work...
-		//[HttpDelete("{userId}/{itemId}")]
-		//public async Task<ActionResult> DeleteUserItem(Guid userId)
-		//{
-		//    if(!await _itemsRepository.IsUserExist(userId)) { return BadRequest(); }
-		//    await _itemsRepository.DeleteItemAsync(userId);
-		//    return NoContent();
+        //this for Delete a Specific  Item For Specific User but Still under work...
+        [HttpDelete("{userId}/{itemId}")]
+        public async Task<ActionResult> DeleteUserItem(Guid userId,Guid itemId)
+        {
+            if (!await _itemsRepository.IsUserExist(userId)) { return BadRequest(); }
 
-		//}
+			//        if (!_itemsRepository.IsItemExistFor())
+			//        {
+			//				return NotFound();
 
-	}
+			//        }
+
+			await _itemsRepository.DeleteItemAsync(itemId);
+            return NoContent();
+
+        }
+
+    }
 
 }
