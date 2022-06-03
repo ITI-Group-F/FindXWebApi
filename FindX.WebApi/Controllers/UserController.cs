@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace FindX.WebApi.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin,User")]
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
@@ -40,7 +40,7 @@ namespace FindX.WebApi.Controllers
             var token = await _UserAuthenticate.CheckLogIn(user);
             if (token == null)
             {
-                return Unauthorized();
+                return NotFound("Wrong username/email or password");
             }
             return Ok(token); 
         }
