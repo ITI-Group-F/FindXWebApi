@@ -11,7 +11,6 @@ namespace FindX.WebApi.DTOs.Profiles
 			CreateMap<ItemUpdateDTO, Item>();
 			CreateMap<ItemCreateDTO, Item>();
 			CreateMap<Item, ItemReadDTO>();
-			CreateMap<PopulatedItem, ItemReadDTO>();
 		}
 	}
 }
