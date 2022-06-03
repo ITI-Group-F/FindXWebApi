@@ -7,12 +7,12 @@ namespace FindX.WebApi.Extenstions
 	{
 		public static void ConfigureSerilog(this WebApplicationBuilder builder)
 		{
-			Log.Logger = new LoggerConfiguration()
-				.Enrich.FromLogContext()
-				.Enrich.WithExceptionDetails()
-				.WriteTo.Debug()
-				.WriteTo.Console()
-				.CreateLogger();
-		}
+            Log.Logger = new LoggerConfiguration()
+                .Enrich.FromLogContext()
+                .Enrich.WithExceptionDetails()
+                .WriteTo.Debug()
+                .WriteTo.Console()
+                .CreateLogger();
+        }
 	}
 }

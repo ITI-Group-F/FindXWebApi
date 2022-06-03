@@ -2,11 +2,12 @@
 using FindX.WebApi.DTOs;
 using FindX.WebApi.Models;
 using FindX.WebApi.Repositories;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+
 namespace FindX.WebApi.Controllers
-{
+{	[Authorize]
 	[Route("api/[controller]")]
 	[ApiController]
 	public class UserItemsController : ControllerBase
