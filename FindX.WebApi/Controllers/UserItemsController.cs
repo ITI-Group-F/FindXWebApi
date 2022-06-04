@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FindX.WebApi.Controllers
 {
-    [Authorize(Roles = "Admin,User")]
+    //[Authorize(Roles = "Admin,User")]
     [Route("api/[controller]")]
 	[ApiController]
 	public class UserItemsController : ControllerBase
@@ -113,23 +113,18 @@ namespace FindX.WebApi.Controllers
 		}
 
 
-		//this for Delete a Specific  Item For Specific User but Still under work...
-		[HttpDelete("{userId}/{itemId}")]
-		public async Task<ActionResult> DeleteUserItem(Guid userId, Guid itemId)
-		{
-			if (!await _itemsRepository.IsUserExist(userId)) { return BadRequest(); }
+        //this for Delete a Specific  Item For Specific User but Still under work...
+        [HttpDelete("{userId}/{itemId}")]
+        public async Task<ActionResult> DeleteUserItem(Guid userId,Guid itemId)
+        {
+            if (!await _itemsRepository.IsUserExist(userId)) { return NotFound(); }
 
-			//        if (!_itemsRepository.IsItemExistFor())
-			//        {
-			//				return NotFound();
+			
+			await _itemsRepository.DeleteItemAsync(userId,itemId);
+            return NoContent();
 
-			//        }
+        }
 
-			await _itemsRepository.DeleteItemAsync(itemId);
-			return NoContent();
-
-		}
-
-	}
+    }
 
 }

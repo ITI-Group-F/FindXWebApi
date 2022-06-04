@@ -28,10 +28,11 @@ namespace FindX.WebApi.Repositories
 			await _context.Items.InsertOneAsync(item);
 		}
 
-		public Task DeleteItemAsync(Guid itemId)
+		public async Task DeleteItemAsync( Guid userId, Guid itemId)
 		{
 			var filter = Builders<Item>.Filter.Eq(x => x.Id, itemId);
-			return _context.Items.DeleteOneAsync(filter);
+			filter &= Builders<Item>.Filter.Eq(x => x.UserId, userId);
+			await _context.Items.DeleteOneAsync(filter);
 		}
 
 			public async Task<IEnumerable<Item>> GetAllItemsAsync()
@@ -89,5 +90,7 @@ namespace FindX.WebApi.Repositories
 				};
 			return await query.ToListAsync();
 		}
-	}
+
+
+    }
 }
