@@ -7,6 +7,8 @@ using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using FindX.WebApi.DTOs;
+using FindX.WebApi.Services;
 
 namespace FindX.WebApi.Controllers
 {
@@ -15,71 +17,37 @@ namespace FindX.WebApi.Controllers
     [ApiController]
     public class AuthenticateController:ControllerBase
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly RoleManager<ApplicationRole> _roleManager;
-        private readonly IConfiguration _configuration;
+        private readonly IAuthenticate _Authenticate;
 
-        public AuthenticateController(
-            UserManager<ApplicationUser> userManager,
-            RoleManager<ApplicationRole> roleManager,
-            IConfiguration configuration)
+
+
+        public AuthenticateController(IAuthenticate Authenticate)
         {
-            _userManager = userManager;
-            _roleManager = roleManager;
-            _configuration = configuration;
+            _Authenticate = Authenticate;
         }
 
         [HttpPost]
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
-            var user = await _userManager.FindByNameAsync(model.Username);
-            if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
-            {
-                var userRoles = await _userManager.GetRolesAsync(user);
-
-                var authClaims = new List<Claim>
+               var result = await _Authenticate.Login(model);
+                if (result != null)
                 {
-                    new Claim(ClaimTypes.Name, user.UserName),
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                };
-
-                foreach (var userRole in userRoles)
-                {
-                    authClaims.Add(new Claim(ClaimTypes.Role, userRole));
+                    return Ok(result);
                 }
-
-                var token = GetToken(authClaims);
-
-                return Ok(new
-                {
-                    token = new JwtSecurityTokenHandler().WriteToken(token),
-                    expiration = token.ValidTo
-                });
-            }
-            return Unauthorized();
+                return BadRequest("Wrong user name or password");
         }
         
         [HttpPost]
         [Route("register-user")]        
         public async Task<IActionResult> Register([FromBody] RegisterModel model)
         {
-            var userExists = await _userManager.FindByNameAsync(model.Username);
-            if (userExists != null)
-                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User already exists!" });
-            List<Guid> roles = _roleManager.Roles.Where(r => r.Name == "User").Select(r => r.Id).ToList();
-            ApplicationUser user = new()
+            var result = await _Authenticate.Register(model);
+            if (result != null)
             {
-                Roles = roles,
-                Email = model.Email,
-                SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = model.Username
-            };
-            var result = await _userManager.CreateAsync(user, model.Password);
-            if (!result.Succeeded)
-                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User creation failed! Please check user details and try again." });
-
-            return Ok(new Response { Status = "Success", Message = "User created successfully!" });
+                return Ok(result);
+            }
+            return BadRequest("User maybe exists or incorrect password format");
         }
         
         [Authorize(Roles = "Admin")]
@@ -87,62 +55,25 @@ namespace FindX.WebApi.Controllers
         [Route("register-admin")]
         public async Task<IActionResult> RegisterAdmin([FromBody] RegisterModel model)
         {
-            var userExists = await _userManager.FindByNameAsync(model.Username);
-            if (userExists != null)
-                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User already exists!" });
-            List<Guid> roles = _roleManager.Roles.Where(r => r.Name == "Admin").Select(r => r.Id).ToList();
-
-            ApplicationUser user = new()
-            {   Roles= roles,
-                Email = model.Email,
-                SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = model.Username
-            };
-            var result = await _userManager.CreateAsync(user, model.Password);
-            if (!result.Succeeded)
-                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User creation failed! Please check user details and try again." });
-
-            if (!await _roleManager.RoleExistsAsync(UserRoles.Admin))
-                await _roleManager.CreateAsync(new ApplicationRole(UserRoles.Admin));
-            if (!await _roleManager.RoleExistsAsync(UserRoles.User))
-                await _roleManager.CreateAsync(new ApplicationRole(UserRoles.User));
-
-            if (await _roleManager.RoleExistsAsync(UserRoles.Admin))
+            var result = await _Authenticate.RegisterAdmin(model);
+            if (result != null)
             {
-                await _userManager.AddToRoleAsync(user, UserRoles.Admin);
+                return Ok(result);
             }
-            if (await _roleManager.RoleExistsAsync(UserRoles.Admin))
-            {
-                await _userManager.AddToRoleAsync(user, UserRoles.User);
-            }
-            return Ok(new Response { Status = "Success", Message = "User created successfully!" });
+            return BadRequest("User maybe exists or incorrect password format");
         }
-        
-        private JwtSecurityToken GetToken(List<Claim> authClaims)
-        {
-            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["PrivateKey"]));
-
-            var token = new JwtSecurityToken(
-                //issuer: _configuration["JWT:ValidIssuer"],
-                //audience: _configuration["JWT:ValidAudience"],
-                expires: DateTime.Now.AddHours(3),
-                claims: authClaims,
-                signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
-                );
-
-            return token;
-        }
-        
+                       
         [Authorize(Roles = "Admin")]
         [HttpPost]
         [Route("create-role")]
         public async Task<IActionResult> CreateRole([Required] string name)
-        {            
-             IdentityResult result = await _roleManager.CreateAsync(new ApplicationRole() { Name = name });
-            if (result.Succeeded) {
-                return Ok($"{name} Role created");
-            }                                  
-            return BadRequest($"{name} Role creation failed, maybe role already exists!");                                      
+        {
+            var result = await _Authenticate.CreateRole(name);
+            if (result != null)
+            {
+                return Ok(result);
+            }
+            return BadRequest("Role already exists");
         }
 
     }

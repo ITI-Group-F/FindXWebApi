@@ -13,6 +13,7 @@ namespace FindX.WebApi.Extenstions
 			builder.Services.AddSingleton<IUserItemsRepository, UserItemsRepository>();			
 			builder.Services.AddSingleton<IPopulatorRepository, PopulatorRepository>();
 			builder.Services.AddSingleton<ISubCategoryRepository, SubCategoryRepository>();
+			builder.Services.AddScoped<IAuthenticate, Authenticate>();
 		}
 	}
 }
