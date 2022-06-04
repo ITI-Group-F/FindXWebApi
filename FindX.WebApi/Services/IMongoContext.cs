@@ -1,5 +1,4 @@
 ﻿using FindX.WebApi.Models;
-using FindX.WebApi.Models;
 using MongoDB.Driver;
 
 namespace FindX.WebApi.Services

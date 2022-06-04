@@ -2,12 +2,14 @@
 using FindX.WebApi.DTOs;
 using FindX.WebApi.Models;
 using FindX.WebApi.Repositories;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
 
 namespace FindX.WebApi.Controllers
 {
-	[Route("api/[controller]")]
+    [Authorize(Roles = "Admin,User")]
+    [Route("api/[controller]")]
 	[ApiController]
 	public class UserItemsController : ControllerBase
 	{
@@ -19,7 +21,6 @@ namespace FindX.WebApi.Controllers
 			_itemsRepository = itemsRepository;
 			_mapper = mapper;
 		}
-
 
 		//Get All Items In DB .....
 		[HttpGet]
@@ -48,9 +49,6 @@ namespace FindX.WebApi.Controllers
 			var userItemsDto = _mapper.Map<IEnumerable<ItemReadDTO>>(userItems);
 			return Ok(userItemsDto);
 		}
-
-
-
 
 		//this  for Getting A Specific  Item For Specific User but Still under work 
 		//[HttpGet("{itemId}")]
@@ -88,8 +86,6 @@ namespace FindX.WebApi.Controllers
 
 
         }
-
-
 
 
 		//Update or Edit  User  

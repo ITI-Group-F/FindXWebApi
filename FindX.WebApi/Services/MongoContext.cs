@@ -1,7 +1,6 @@
 using MongoDB.Driver;
 using FindX.WebApi.Models;
-using AspNetCore.Identity.MongoDbCore.Infrastructure;
-using FindX.WebApi.Models;
+
 
 namespace FindX.WebApi.Services
 {
