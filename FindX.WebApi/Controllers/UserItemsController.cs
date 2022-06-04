@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FindX.WebApi.Controllers
 {
-    //[Authorize(Roles = "Admin,User")]
+    [Authorize(Roles = "Admin,User")]
     [Route("api/[controller]")]
 	[ApiController]
 	public class UserItemsController : ControllerBase
