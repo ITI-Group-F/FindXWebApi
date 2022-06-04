@@ -28,14 +28,13 @@ namespace FindX.WebApi.Repositories
 			await _context.Items.InsertOneAsync(item);
 		}
 
-		public async Task DeleteItemAsync(Guid userId, Guid itemId)
+		public Task DeleteItemAsync(Guid itemId)
 		{
 			var filter = Builders<Item>.Filter.Eq(x => x.Id, itemId);
-			filter &= Builders<Item>.Filter.Eq(x => x.UserId, userId);
-			await _context.Items.DeleteOneAsync(filter);
+			return _context.Items.DeleteOneAsync(filter);
 		}
 
-		public async Task<IEnumerable<Item>> GetAllItemsAsync()
+			public async Task<IEnumerable<Item>> GetAllItemsAsync()
 		{
 			return await _context.Items
 				.Find(new BsonDocument())
