@@ -70,10 +70,9 @@ public class UserItemsRepository : IUserItemsRepository
 		return await Task.FromResult(user is not null);
 	}
 
-	public async Task UpdateItemAsync(Guid userId, Item item)
+	public async Task UpdateItemAsync(Item item)
 	{
-		item.UserId = userId;
-		var filter = _itemFilterBuilder.Eq(x => x.UserId, userId);
+		var filter = _itemFilterBuilder.Eq(x => x.UserId, item.UserId);
 		await _context.Items.ReplaceOneAsync(filter, item);
 	}
 }
