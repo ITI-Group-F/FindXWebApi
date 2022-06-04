@@ -9,7 +9,7 @@ namespace FindX.WebApi.Repositories
 		Task<IEnumerable<PopulatedItem>> GetItemsForUserAsync(Guid userId);
 		Task<PopulatedItem> GetItemForUserAsync(Guid userId, Guid itemId);
 		Task CreateItemAsync(Item item);
-		Task UpdateItemAsync(Guid userId, Item item);
+		Task UpdateItemAsync(Item item);
 		Task DeleteItemAsync(Guid userId, Guid itemId);
 		Task<bool> IsUserExist(Guid userId);
 	}

@@ -79,34 +79,49 @@ namespace FindX.WebApi.Controllers
 		}
 
 		[HttpPut("{itemId}")]
-		public async Task<ActionResult<ItemUpdateDTO>> PutUserItem(Guid userId, Guid itemId, ItemUpdateDTO newItem)
+		public async Task<ActionResult> UpdateItemAsync(Guid userId, Guid itemId, ItemUpdateDTO updatedItem)
 		{
-			if (userId != newItem.UserId || !ModelState.IsValid)
+			if (!await _itemsRepository.IsUserExist(userId) ||
+				await _itemsRepository.GetItemForUserAsync(userId, itemId) is null)
 			{
-				return BadRequest();
+				return NotFound();
 			}
 
+			var subCat = await _subCategoryRepository.GetSubCategoryIdAsync(updatedItem.SubCategory);
 
-			//        if (!_itemsRepository.IsItemExistFor(userId,itemId))
-			//        {
-			//return NotFound();
-
-			//        }
-
-
-			var itemModel = _mapper.Map<Item>(newItem);
-			await _itemsRepository.UpdateItemAsync(userId, itemModel);
-
-			return NoContent();
-
+			var item = _mapper.Map<Item>(updatedItem);
+			item.Id = Guid.NewGuid();
+			item.UserId = userId;
+			item.SubCategoryId = subCat.Id;
+			item.SuperCategoryId = subCat.SuperCategoryId;
+			try
+			{
+				await _itemsRepository.UpdateItemAsync(item);
+				return NoContent();
+			}
+			catch
+			{
+				return StatusCode(StatusCodes.Status500InternalServerError);
+			}
 		}
 
 		[HttpDelete("{itemId}")]
 		public async Task<ActionResult> DeleteUserItem(Guid userId, Guid itemId)
 		{
-			if (!await _itemsRepository.IsUserExist(userId)) { return NotFound(); }
-			await _itemsRepository.DeleteItemAsync(userId, itemId);
-			return NoContent();
+			if (!await _itemsRepository.IsUserExist(userId) ||
+				await _itemsRepository.GetItemForUserAsync(userId, itemId) is null)
+			{
+				return NotFound();
+			}
+			try
+			{
+				await _itemsRepository.DeleteItemAsync(userId, itemId);
+				return NoContent();
+			}
+			catch
+			{
+				return StatusCode(StatusCodes.Status500InternalServerError);
+			}
 		}
 	}
 }
