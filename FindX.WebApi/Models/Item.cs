@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Libmongocrypt;
 using MongoDbGenericRepository.Attributes;
 
 namespace FindX.WebApi.Models
@@ -14,7 +15,7 @@ namespace FindX.WebApi.Models
 		public string Location { get; set; }
 		public bool IsLost { get; set; }
 		public bool IsClosed { get; set; }
-		public ICollection<string> Images { get; set; } = new HashSet<string>();
+		public ICollection<byte[]> Images { get; set; } = new HashSet<byte[]>();
 
 		public Guid UserId { get; set; }
 		public Guid SubCategoryId { get; set; }

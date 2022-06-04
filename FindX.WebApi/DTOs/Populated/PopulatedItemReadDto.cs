@@ -1,16 +1,21 @@
 ﻿using FindX.WebApi.Models;
 using MongoDB.Libmongocrypt;
 
-namespace FindX.WebApi.DTOs
+namespace FindX.WebApi.DTOs.Populated
 {
-	public class ItemCreateDTO
+	public class PopulatedItemReadDto
 	{
+		public Guid Id { get; set; }
 		public string Title { get; set; }
 		public string Description { get; set; }
 		public DateTime Date { get; set; }
 		public string Location { get; set; }
 		public bool IsLost { get; set; }
+		//public bool IsClosed { get; set; }
 		public ICollection<byte[]> Images { get; set; } = new HashSet<byte[]>();
-		public string SubCategory { get; set; }
+
+		public ApplicationUser User { get; set; }
+		public SubCategory SubCategory { get; set; }
+		public SuperCategory SuperCategory { get; set; }
 	}
 }

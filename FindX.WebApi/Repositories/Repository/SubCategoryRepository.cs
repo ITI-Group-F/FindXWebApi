@@ -14,12 +14,11 @@ namespace FindX.WebApi.Repositories
 			_context = context;
 		}
 
-		public async Task<Guid> GetSubCategoryId(string title)
+		public async Task<SubCategory> GetSubCategoryIdAsync(string title)
 		{
 			var filter = _filterBuilder.Eq(c => c.Title, title);
 			return await _context.SubCategories
 				.Find(filter)
-				.Project(c => c.Id)
 				.SingleOrDefaultAsync();
 		}
 	}

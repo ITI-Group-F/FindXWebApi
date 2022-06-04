@@ -10,9 +10,11 @@ namespace FindX.WebApi.Extenstions
 		public static void RegisterServices(this WebApplicationBuilder builder)
 		{
 			builder.Services.AddSingleton<IMongoContext, MongoContext>();
-			builder.Services.AddSingleton<IItemRepository, ItemRepository>();
+			builder.Services.AddSingleton<IUserItemsRepository, UserItemsRepository>();
 			builder.Services.AddSingleton<IApplicationAuthenticateUserRepository, ApplicationUserAuthenticateRepository>();
 			builder.Services.AddSingleton<IUserRepository, UserRepository>();
+			builder.Services.AddSingleton<IPopulatorRepository, PopulatorRepository>();
+			builder.Services.AddSingleton<ISubCategoryRepository, SubCategoryRepository>();
 		}
 	}
 }

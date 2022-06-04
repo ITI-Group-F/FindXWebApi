@@ -1,7 +1,9 @@
-﻿namespace FindX.WebApi.Repositories
+﻿using FindX.WebApi.Models;
+
+namespace FindX.WebApi.Repositories
 {
 	public interface ISubCategoryRepository
 	{
-		Task<Guid> GetSubCategoryId(string title);
+		Task<SubCategory> GetSubCategoryIdAsync(string title);
 	}
 }

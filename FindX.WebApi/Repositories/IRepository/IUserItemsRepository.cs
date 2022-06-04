@@ -3,17 +3,14 @@ using FindX.WebApi.Models.Populated;
 
 namespace FindX.WebApi.Repositories
 {
-	public interface IItemRepository
+	public interface IUserItemsRepository
 	{
 		Task<IEnumerable<Item>> GetAllItemsAsync();
 		Task<IEnumerable<PopulatedItem>> GetItemsForUserAsync(Guid userId);
-		Task CreateItemAsync(Guid userId, Item item);
+		Task<PopulatedItem> GetItemForUserAsync(Guid userId, Guid itemId);
+		Task CreateItemAsync(Item item);
 		Task UpdateItemAsync(Guid userId, Item item);
 		Task DeleteItemAsync(Guid userId, Guid itemId);
-
-
-
 		Task<bool> IsUserExist(Guid userId);
-
 	}
 }

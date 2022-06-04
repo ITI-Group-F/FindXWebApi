@@ -19,12 +19,12 @@ namespace FindX.WebApi.Controllers
 		public IMongoCollection<SubCategory> Sub { get; }
 		public IMongoCollection<SuperCategory> Sup { get; }
 
-		private readonly IItemRepository _itemRepository;
+		private readonly IUserItemsRepository _itemRepository;
 		private readonly UserManager<ApplicationUser> _userManager;
 		private readonly IMapper _mapper;
 
 		public TestController(IMongoClient client,
-			IItemRepository itemRepository,
+			IUserItemsRepository itemRepository,
 			UserManager<ApplicationUser> userManager,
 			IMapper mapper)
 		{
