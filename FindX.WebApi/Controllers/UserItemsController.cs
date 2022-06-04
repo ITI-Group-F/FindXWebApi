@@ -121,15 +121,10 @@ namespace FindX.WebApi.Controllers
         [HttpDelete("{userId}/{itemId}")]
         public async Task<ActionResult> DeleteUserItem(Guid userId,Guid itemId)
         {
-            if (!await _itemsRepository.IsUserExist(userId)) { return BadRequest(); }
+            if (!await _itemsRepository.IsUserExist(userId)) { return NotFound(); }
 
-			//        if (!_itemsRepository.IsItemExistFor())
-			//        {
-			//				return NotFound();
-
-			//        }
-
-			await _itemsRepository.DeleteItemAsync(itemId);
+			
+			await _itemsRepository.DeleteItemAsync(userId,itemId);
             return NoContent();
 
         }
