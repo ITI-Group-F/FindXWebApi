@@ -21,57 +21,10 @@ builder.Host.UseSerilog();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.RegisterMongoDb();
 builder.RegisterServices();
-#endregion
-
 builder.Services.AddEndpointsApiExplorer();
-
-builder.Services.AddAuthentication(x =>
-{
-	x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-	x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-	x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-
-
-}).AddJwtBearer(x =>
-{
-	x.RequireHttpsMetadata = false;
-	x.SaveToken = true;
-	x.TokenValidationParameters = new TokenValidationParameters
-	{
-		ValidateIssuerSigningKey = true,
-		IssuerSigningKey =
-			new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration.GetSection("JWT:PrivateKey").Value)),
-		ValidateIssuer = false,
-		ValidateAudience = false
-	};
-});
-
-builder.Services.AddSwaggerGen(option =>
-{
-	option.SwaggerDoc("v1", new OpenApiInfo { Title = "FindX API", Version = "v1" });
-	option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-	{
-		In = ParameterLocation.Header,
-		Name = "Authorization",
-		Type = SecuritySchemeType.Http,
-		BearerFormat = "JWT",
-		Scheme = "Bearer"
-	});
-	option.AddSecurityRequirement(new OpenApiSecurityRequirement
-		{
-				{
-						new OpenApiSecurityScheme
-						{
-								Reference = new OpenApiReference
-								{
-										Type=ReferenceType.SecurityScheme,
-										Id="Bearer"
-								}
-						},
-						new string[]{}
-				}
-		});
-});
+builder.AddJwt();
+builder.AddSwagger();
+#endregion
 
 var app = builder.Build();
 
