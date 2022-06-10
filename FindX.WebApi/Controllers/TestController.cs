@@ -4,20 +4,18 @@ using FindX.WebApi.Models;
 using FindX.WebApi.Repositories;
 using Microsoft.AspNetCore.Identity;
 using AutoMapper;
-using FindX.WebApi.Models.Populated;
-using Microsoft.AspNetCore.Authorization;
+using MongoDB.Bson;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace FindX.WebApi.Controllers
 {
-	[Authorize(Roles = "Admin,User")]
 	[Route("api/[controller]")]
 	[ApiController]
 	public class TestController : ControllerBase
 	{
 		public IMongoDatabase _database;
 		private readonly FilterDefinitionBuilder<Item> _filterBuilder = Builders<Item>.Filter;
-		public IMongoCollection<Item> Items { get; private set; }
+		public IMongoCollection<BsonDocument> Items { get; private set; }
 		public IMongoCollection<SubCategory> Sub { get; }
 		public IMongoCollection<SuperCategory> Sup { get; }
 
@@ -31,7 +29,7 @@ namespace FindX.WebApi.Controllers
 			IMapper mapper)
 		{
 			_database = client.GetDatabase("FindX");
-			Items = _database.GetCollection<Item>("items");
+			Items = _database.GetCollection<BsonDocument>("items");
 			Sub = _database.GetCollection<SubCategory>("subCategories");
 			Sup = _database.GetCollection<SuperCategory>("superCategories");
 			_itemRepository = itemRepository;
@@ -42,9 +40,29 @@ namespace FindX.WebApi.Controllers
 		[HttpGet]
 		public async Task<ActionResult> Get()
 		{
+			//var pipelineStage = new BsonDocument
+			//	{
+			//		{
+			//			"$lookup", new BsonDocument{
+			//					{ "from", "superCategories" },
+			//					{ "localField", "SuperCategoryId" },
+			//					{ "foreignField", "_id" },
+			//					{ "as", "superCategory" }
+			//				}
+			//		}
+			//	};
 
-			var reuslt = await _itemRepository.GetItemsForUserAsync(new Guid("547a8d67-7fa1-414d-b456-33cde2c58cd7"));
-			return Ok(reuslt);
+			//BsonDocument[] pipeline = new BsonDocument[] {
+			//		pipelineStage
+			//};
+			//var docs = await Items.Aggregate<BsonDocument>(pipeline).ToListAsync();
+			var docs = await Items
+				.Aggregate()
+				.Lookup("superCategories", "SuperCategoryId", "_id", "superCategory")
+				.As<BsonDocument>()
+				.ToListAsync();
+
+			return Ok(docs);
 		}
 
 		// GET api/<TestController>/5
