@@ -12,5 +12,6 @@ namespace FindX.WebApi.DTOs
 		public bool IsLost { get; set; }
 		public ICollection<byte[]> Images { get; set; } = new HashSet<byte[]>();
 		public string SubCategory { get; set; }
+		public string SuperCategory { get; set; }
 	}
 }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FindX.WebApi.DTOs;
+using FindX.WebApi.Helpers;
 using FindX.WebApi.Models;
 using FindX.WebApi.Repositories;
 using Microsoft.AspNetCore.Authorization;
@@ -56,8 +57,15 @@ namespace FindX.WebApi.Controllers
 				return NotFound();
 			}
 
-			//TODO
-			// Check For Cats
+			if (!SubCategories.IsExists(newItem.SubCategory))
+			{
+				return NotFound("Sub category not found!");
+			}
+			if (!SuperCategories.IsExists(newItem.SuperCategory))
+			{
+				return NotFound("Super category not found!");
+			}
+
 			var item = _mapper.Map<Item>(newItem);
 			item.Id = Guid.NewGuid();
 			item.UserId = userId;
@@ -82,8 +90,15 @@ namespace FindX.WebApi.Controllers
 				return NotFound();
 			}
 
-			//TODO
-			// Check For Cats
+			if (!SubCategories.IsExists(updatedItem.SubCategory))
+			{
+				return NotFound("Sub category not found!");
+			}
+			if (!SuperCategories.IsExists(updatedItem.SuperCategory))
+			{
+				return NotFound("Super category not found!");
+			}
+
 			var item = _mapper.Map<Item>(updatedItem);
 			item.Id = Guid.NewGuid();
 			item.UserId = userId;
