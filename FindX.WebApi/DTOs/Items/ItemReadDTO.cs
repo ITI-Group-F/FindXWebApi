@@ -1,5 +1,4 @@
 ﻿using FindX.WebApi.Models;
-using MongoDB.Libmongocrypt;
 
 namespace FindX.WebApi.DTOs
 {
@@ -11,9 +10,10 @@ namespace FindX.WebApi.DTOs
 		public DateTime Date { get; set; }
 		public string Location { get; set; }
 		public bool IsLost { get; set; }
+		//public bool IsClosed { get; set; }
 		public ICollection<byte[]> Images { get; set; } = new HashSet<byte[]>();
-
-		public ApplicationUser User { get; set; }
-		public SuperCategory SubCategory { get; set; }
+		public string SubCategory { get; set; }
+		public string SuperCategory { get; set; }
+		public Guid UserId { get; set; }
 	}
 }

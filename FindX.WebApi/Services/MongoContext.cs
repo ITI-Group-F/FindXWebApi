@@ -10,8 +10,6 @@ namespace FindX.WebApi.Services
 		public IMongoDatabase Database { get; }
 		public IMongoCollection<Item> Items { get; }
 		public IMongoCollection<ApplicationUser> Users { get; }
-		public IMongoCollection<SubCategory> SubCategories { get; }
-		public IMongoCollection<SuperCategory> SuperCategories { get; }
 
 		public MongoContext(IMongoClient client, IConfiguration configuration)
 		{
@@ -19,8 +17,6 @@ namespace FindX.WebApi.Services
 			Database = client.GetDatabase(_databaseName);
 			Items = Database.GetCollection<Item>("items");
 			Users = Database.GetCollection<ApplicationUser>("users");
-			SubCategories = Database.GetCollection<SubCategory>("subCategories");
-			SuperCategories = Database.GetCollection<SuperCategory>("superCategories");
 		}
 	}
 }

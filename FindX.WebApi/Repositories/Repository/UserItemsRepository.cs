@@ -1,7 +1,5 @@
 ﻿using FindX.WebApi.Extenstions;
 using FindX.WebApi.Models;
-using FindX.WebApi.Models.Populated;
-using FindX.WebApi.Repositories.IRepository;
 using FindX.WebApi.Services;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -11,14 +9,12 @@ namespace FindX.WebApi.Repositories;
 public class UserItemsRepository : IUserItemsRepository
 {
 	private readonly IMongoContext _context;
-	private readonly IPopulatorRepository _populatorRepository;
 	private readonly FilterDefinitionBuilder<Item> _itemFilterBuilder = Builders<Item>.Filter;
 	private readonly FilterDefinitionBuilder<ApplicationUser> _userFilterBuilder = Builders<ApplicationUser>.Filter;
 
-	public UserItemsRepository(IMongoContext context, IPopulatorRepository populatorRepository)
+	public UserItemsRepository(IMongoContext context)
 	{
 		_context = context;
-		_populatorRepository = populatorRepository;
 	}
 
 	public async Task CreateItemAsync(Item item)
@@ -51,14 +47,21 @@ public class UserItemsRepository : IUserItemsRepository
 			.ToListAsync();
 	}
 
-	public async Task<IEnumerable<PopulatedItem>> GetItemsForUserAsync(Guid userId)
+	public async Task<IEnumerable<Item>> GetItemsForUserAsync(Guid userId)
 	{
-		return await _populatorRepository.GetPopulatedItemsForUserAsync(userId);
+		var filter = _itemFilterBuilder.Eq(x => x.UserId, userId);
+		return await _context.Items
+			.Find(filter)
+			.ToListAsync();
 	}
 
-	public async Task<PopulatedItem> GetItemForUserAsync(Guid userId, Guid itemId)
+	public async Task<Item> GetItemForUserAsync(Guid userId, Guid itemId)
 	{
-		return await _populatorRepository.GetPopulatedItemForUserAsync(userId, itemId);
+		var filter = _itemFilterBuilder.Eq(x => x.UserId, userId) &
+			_itemFilterBuilder.Eq(x => x.Id, itemId);
+		return await _context.Items
+			.Find(filter)
+			.SingleOrDefaultAsync();
 	}
 
 	public async Task<bool> IsUserExist(Guid userId)

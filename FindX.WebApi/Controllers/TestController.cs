@@ -16,8 +16,6 @@ namespace FindX.WebApi.Controllers
 		public IMongoDatabase _database;
 		private readonly FilterDefinitionBuilder<Item> _filterBuilder = Builders<Item>.Filter;
 		public IMongoCollection<BsonDocument> Items { get; private set; }
-		public IMongoCollection<SubCategory> Sub { get; }
-		public IMongoCollection<SuperCategory> Sup { get; }
 
 		private readonly IUserItemsRepository _itemRepository;
 		private readonly UserManager<ApplicationUser> _userManager;
@@ -30,8 +28,6 @@ namespace FindX.WebApi.Controllers
 		{
 			_database = client.GetDatabase("FindX");
 			Items = _database.GetCollection<BsonDocument>("items");
-			Sub = _database.GetCollection<SubCategory>("subCategories");
-			Sup = _database.GetCollection<SuperCategory>("superCategories");
 			_itemRepository = itemRepository;
 			_userManager = userManager;
 			_mapper = mapper;

@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using FindX.WebApi.Models;
-using FindX.WebApi.Models.Populated;
 
 namespace FindX.WebApi.DTOs.Profiles
 {
