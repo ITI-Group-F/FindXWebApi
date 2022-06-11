@@ -24,6 +24,7 @@ builder.RegisterServices();
 builder.Services.AddEndpointsApiExplorer();
 builder.AddJwt();
 builder.AddSwagger();
+builder.Services.AddCors();
 #endregion
 
 var app = builder.Build();
@@ -34,6 +35,11 @@ if (app.Environment.IsDevelopment())
 	app.UseSwagger();
 	app.UseSwaggerUI();
 }
+app.UseCors(x => x
+		.AllowAnyMethod()
+		.AllowAnyHeader()
+		.SetIsOriginAllowed(origin => true)
+		.AllowCredentials());
 
 app.UseHttpsRedirection();
 app.UseAuthentication();
