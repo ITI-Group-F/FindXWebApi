@@ -31,12 +31,36 @@ namespace FindX.WebApi.Controllers
 
 		[HttpGet]
 		[Route("undersub")]
-		public async Task<ActionResult<IEnumerable<ItemReadDTO>>> GetItemsUnderSubCategoryAsync()
+		public async Task<ActionResult<IEnumerable<ItemReadDTO>>> GetItemsUnderSubCategoryAsync(string subcategory)
 		{
-			var items = _itemsRepository.GetItemsAsync();
-			var itemsDto = _mapper.Map<IEnumerable<ItemReadDTO>>(items);
-			return Ok(itemsDto);
+			if (SubCategories.IsExists(subcategory))
+			{
+				var items = _itemsRepository.GetItemsUnderSubCategoryAsync(subcategory);
+				var itemsDto = _mapper.Map<IEnumerable<ItemReadDTO>>(items);
+				return Ok(itemsDto);
+			}
+			else 
+			{
+				return NotFound();
+			}
 		}
+
+		[HttpGet]
+		[Route("undersup")]
+		public async Task<ActionResult<IEnumerable<ItemReadDTO>>> GetItemsUnderSuperCategoryAsync(string supercategory)
+		{
+            if (SuperCategories.IsExists(supercategory))
+            {
+                var items = _itemsRepository.GetItemsUnderSuperCategoryAsync(supercategory);
+                var itemsDto = _mapper.Map<IEnumerable<ItemReadDTO>>(items);
+                return Ok(itemsDto);
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
 
 	}
 }

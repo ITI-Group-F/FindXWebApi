@@ -24,14 +24,19 @@ public class ItemsRepository : IItemsRepository
 			.ToListAsync();
 	}
 
-	public Task<IEnumerable<Item>> GetItemsUnderSubCategoryAsync(string subCategory)
+	public async Task<IEnumerable<Item>> GetItemsUnderSubCategoryAsync(string subCategory)
 	{
-		throw new NotImplementedException();
-	}
+		var Filter = _filterBuilder.Eq(i => i.SubCategory, subCategory);
+		return await _context.Items.Find(Filter).ToListAsync();
+		
+		 
+    }
 
-	public Task<IEnumerable<Item>> GetItemsUnderSuperCategoryAsync(string superCategory)
+	public async Task<IEnumerable<Item>> GetItemsUnderSuperCategoryAsync(string superCategory)
 	{
-		throw new NotImplementedException();
+		var Filter = _filterBuilder.Eq(i => i.SuperCategory, superCategory);
+		return await _context.Items.Find(Filter).ToListAsync();
+
 	}
 }
 
