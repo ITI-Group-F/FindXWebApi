@@ -1,10 +1,9 @@
 ﻿using FindX.WebApi.Models;
 
-namespace FindX.WebApi.Repositories
+namespace FindX.WebApi.Repositories.IRepository
 {
 	public interface IUserItemsRepository
 	{
-		Task<IEnumerable<Item>> GetAllItemsAsync();
 		Task<IEnumerable<Item>> GetItemsForUserAsync(Guid userId);
 		Task<Item> GetItemForUserAsync(Guid userId, Guid itemId);
 		Task CreateItemAsync(Item item);

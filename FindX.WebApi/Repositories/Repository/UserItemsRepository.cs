@@ -1,10 +1,11 @@
 ﻿using FindX.WebApi.Extenstions;
 using FindX.WebApi.Models;
+using FindX.WebApi.Repositories.IRepository;
 using FindX.WebApi.Services;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
-namespace FindX.WebApi.Repositories;
+namespace FindX.WebApi.Repositories.Repository;
 
 public class UserItemsRepository : IUserItemsRepository
 {
@@ -31,13 +32,6 @@ public class UserItemsRepository : IUserItemsRepository
 		var filter = Builders<Item>.Filter.Eq(x => x.Id, itemId);
 		filter &= Builders<Item>.Filter.Eq(x => x.UserId, userId);
 		await _context.Items.DeleteOneAsync(filter);
-	}
-
-	public async Task<IEnumerable<Item>> GetAllItemsAsync()
-	{
-		return await _context.Items
-			.Find(new BsonDocument())
-			.ToListAsync();
 	}
 
 	public async Task<IEnumerable<Item>> GetAllItemsForUserAsync(Guid userId)

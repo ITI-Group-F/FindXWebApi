@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
 using FindX.WebApi.Models;
-using FindX.WebApi.Repositories;
 using Microsoft.AspNetCore.Identity;
 using AutoMapper;
 using MongoDB.Bson;
+using FindX.WebApi.Repositories.IRepository;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace FindX.WebApi.Controllers
@@ -52,13 +52,14 @@ namespace FindX.WebApi.Controllers
 			//		pipelineStage
 			//};
 			//var docs = await Items.Aggregate<BsonDocument>(pipeline).ToListAsync();
-			var docs = await Items
-				.Aggregate()
-				.Lookup("superCategories", "SuperCategoryId", "_id", "superCategory")
-				.As<BsonDocument>()
-				.ToListAsync();
+			//var docs = await Items
+			//	.Aggregate()
+			//	.Lookup("superCategories", "SuperCategoryId", "_id", "superCategory")
+			//	.As<BsonDocument>()
+			//	.ToListAsync();
 
-			return Ok(docs);
+			//return Ok(docs);
+			return NoContent();
 		}
 
 		// GET api/<TestController>/5

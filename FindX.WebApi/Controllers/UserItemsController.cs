@@ -2,7 +2,7 @@
 using FindX.WebApi.DTOs;
 using FindX.WebApi.Helpers;
 using FindX.WebApi.Models;
-using FindX.WebApi.Repositories;
+using FindX.WebApi.Repositories.IRepository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
