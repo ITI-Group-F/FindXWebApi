@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Identity;
 using AutoMapper;
 using MongoDB.Bson;
 using FindX.WebApi.Repositories.IRepository;
+using FindX.WebApi.Services;
+using FindX.WebApi.Models.Chat;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace FindX.WebApi.Controllers
@@ -20,17 +22,23 @@ namespace FindX.WebApi.Controllers
 		private readonly IUserItemsRepository _itemRepository;
 		private readonly UserManager<ApplicationUser> _userManager;
 		private readonly IMapper _mapper;
+		private readonly IConversationRepository _conversationRepository;
+		private readonly IMongoContext _context;
 
 		public TestController(IMongoClient client,
 			IUserItemsRepository itemRepository,
 			UserManager<ApplicationUser> userManager,
-			IMapper mapper)
+			IMapper mapper,
+			IConversationRepository conversationRepository,
+			IMongoContext context)
 		{
 			_database = client.GetDatabase("FindX");
 			Items = _database.GetCollection<BsonDocument>("items");
 			_itemRepository = itemRepository;
 			_userManager = userManager;
 			_mapper = mapper;
+			_conversationRepository = conversationRepository;
+			_context = context;
 		}
 		// GET: api/<TestController>
 		[HttpGet]
@@ -59,6 +67,8 @@ namespace FindX.WebApi.Controllers
 			//	.ToListAsync();
 
 			//return Ok(docs);
+
+			//await _context.Conversations.InsertOneAsync(new Conversation());
 			return NoContent();
 		}
 

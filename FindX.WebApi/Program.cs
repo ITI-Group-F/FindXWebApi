@@ -7,6 +7,7 @@ using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using FindX.WebApi.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
@@ -25,6 +26,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.AddJwt();
 builder.AddSwagger();
 builder.Services.AddCors();
+builder.Services.AddSignalR();
 #endregion
 
 var app = builder.Build();
@@ -45,6 +47,7 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.MapHub<ChatHub>("/chat");
 app.MapControllers();
 
 app.Run();
