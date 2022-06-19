@@ -1,7 +1,9 @@
-﻿using FindX.WebApi.Models;
+﻿using FindX.WebApi.Extenstions;
+using FindX.WebApi.Models;
 using FindX.WebApi.Models.Chat;
 using FindX.WebApi.Repositories.IRepository;
 using FindX.WebApi.Services;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace FindX.WebApi.Repositories.Repository
@@ -17,27 +19,28 @@ namespace FindX.WebApi.Repositories.Repository
 			_context = context;
 		}
 
-		public async Task AddMessageToConversation(Message message, Guid convId)
+		private async Task AddMessageToConversation(Message message, Guid convId)
 		{
 			var filter = _convFilterBuilder.Eq(c => c.Id, convId);
 			var conv = await _context.Conversations.Find(filter).SingleOrDefaultAsync();
-			conv.Messages.Append(message);
+			conv.Messages.Add(message);
 			await _context.Conversations.ReplaceOneAsync(filter, conv);
 		}
 
-		public async Task<Guid> CreateConversation(Guid senderId, Guid receiverId)
+		private async Task<Guid> CreateConversation(Guid senderId, Guid receiverId, Message message)
 		{
 			var conv = new Conversation
 			{
-				Id = new Guid(),
+				Id = Guid.NewGuid(),
 				SenderId = senderId,
-				ReceiverId = receiverId
+				ReceiverId = receiverId,
+				Messages = new List<Message> { message }
 			};
 			await _context.Conversations.InsertOneAsync(conv);
 			return conv.Id;
 		}
 
-		public async Task StartConversation(Guid senderId, Guid receiverId, Message message)
+		public async Task SaveToUserChatHistory(Guid senderId, Guid receiverId, Message message)
 		{
 			var senderFilter = _userFilterBuilder.Eq(u => u.Id, senderId);
 			var sender = await _context.Users
@@ -47,22 +50,25 @@ namespace FindX.WebApi.Repositories.Repository
 			{
 				return;
 			}
-			var userConversations =
-				from userConv in sender.Conversations.AsQueryable()
-				join conv in _context.Conversations.AsQueryable()
-				on userConv equals conv.Id
-				select conv as Conversation;
-			var conList = userConversations.ToList();
-			var res = conList.Where(c => c.ReceiverId == receiverId).SingleOrDefault();
-			if (res is null)
+			//var userConversations =
+			//	from convId in sender.Conversations.AsQueryable()
+			//	join conv in _context.Conversations.AsQueryable()
+			//	on convId equals conv.Id
+			//	select conv;
+
+			var conversationsFilter = _convFilterBuilder.Eq(c => c.SenderId, senderId)
+				& _convFilterBuilder.Eq(c => c.ReceiverId, receiverId);
+
+			var userConversation = await _context.Conversations
+				.Find(conversationsFilter)
+				.SingleOrDefaultAsync();
+
+			if (userConversation is null)
 			{
-				var convId = await CreateConversation(senderId, receiverId);
-				await AddMessageToConversation(message, convId);
+				var convId = await CreateConversation(senderId, receiverId, message);
+				return;
 			}
-			else
-			{
-				await AddMessageToConversation(message, res.Id);
-			}
+			await AddMessageToConversation(message, userConversation.Id);
 		}
 	}
 }

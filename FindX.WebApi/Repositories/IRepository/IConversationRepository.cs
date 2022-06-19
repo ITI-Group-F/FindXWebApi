@@ -4,7 +4,5 @@ namespace FindX.WebApi.Repositories.IRepository;
 
 public interface IConversationRepository
 {
-	Task<Guid> CreateConversation(Guid senderId, Guid receiverId);
-	Task AddMessageToConversation(Message message, Guid convId);
-	Task StartConversation(Guid senderId, Guid receiverId, Message message);
+	Task SaveToUserChatHistory(Guid senderId, Guid receiverId, Message message);
 }

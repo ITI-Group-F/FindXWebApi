@@ -69,6 +69,17 @@ namespace FindX.WebApi.Controllers
 			//return Ok(docs);
 
 			//await _context.Conversations.InsertOneAsync(new Conversation());
+			await _conversationRepository.SaveToUserChatHistory(
+				new Guid("ab34115c-bd2f-4ec2-abbc-c5646cd62ecb"),
+				new Guid("557e746a-694b-4dc2-80fb-fe25d6b880b6"),
+				new Message
+				{
+					Id = Guid.NewGuid(),
+					Content = "Hello",
+					SendDate = DateTime.Now,
+					SenderId = new Guid("ab34115c-bd2f-4ec2-abbc-c5646cd62ecb"),
+				}
+				);
 			return NoContent();
 		}
 

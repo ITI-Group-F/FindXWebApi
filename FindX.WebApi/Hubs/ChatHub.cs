@@ -19,17 +19,18 @@ public class ChatHub : Hub
 		return base.OnConnectedAsync();
 	}
 
-	public Task SendMessageToGroupAsync(string sender, string receiver, string message)
+	public async Task SendMessageToGroupAsync(string sender, string receiver, string message)
 	{
-		_conversationRepository.StartConversation(
+		await _conversationRepository.SaveToUserChatHistory(
 			new Guid(sender),
 			new Guid(receiver),
 			new Message
 			{
+				Id = Guid.NewGuid(),
 				Content = message,
 				SendDate = DateTime.Now,
-				IsSender = true,
+				SenderId = new Guid(sender),
 			});
-		return Clients.Group(receiver).SendAsync("ReceiveMessage", sender, message);
+		await Clients.Group(receiver).SendAsync("ReceiveMessage", sender, message);
 	}
 }
