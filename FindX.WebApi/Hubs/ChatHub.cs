@@ -21,7 +21,7 @@ public class ChatHub : Hub
 
 	public async Task SendMessageToGroupAsync(string sender, string receiver, string message)
 	{
-		await _conversationRepository.SaveToUserChatHistory(
+		await _conversationRepository.SaveToUserChatHistoryAsync(
 			new Guid(sender),
 			new Guid(receiver),
 			new Message
