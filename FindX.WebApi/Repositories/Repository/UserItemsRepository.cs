@@ -58,7 +58,7 @@ public class UserItemsRepository : IUserItemsRepository
 			.SingleOrDefaultAsync();
 	}
 
-	public async Task<bool> IsUserExist(Guid userId)
+	public async Task<bool> IsUserExistAsync(Guid userId)
 	{
 		var filter = _userFilterBuilder.Eq(x => x.Id, userId);
 		var user = await _context.Users

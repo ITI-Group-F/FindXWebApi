@@ -9,6 +9,6 @@ namespace FindX.WebApi.Repositories.IRepository
 		Task CreateItemAsync(Item item);
 		Task UpdateItemAsync(Item item);
 		Task DeleteItemAsync(Guid userId, Guid itemId);
-		Task<bool> IsUserExist(Guid userId);
+		Task<bool> IsUserExistAsync(Guid userId);
 	}
 }

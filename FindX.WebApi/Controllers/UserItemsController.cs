@@ -28,7 +28,7 @@ namespace FindX.WebApi.Controllers
 		[HttpGet]
 		public async Task<ActionResult<IEnumerable<ItemReadDTO>>> GetItemsForUserAsync(Guid userId)
 		{
-			if (!await _itemsRepository.IsUserExist(userId))
+			if (!await _itemsRepository.IsUserExistAsync(userId))
 			{
 				return NotFound();
 			}
@@ -40,7 +40,7 @@ namespace FindX.WebApi.Controllers
 		[HttpGet("{itemId}", Name = "GetItemForUserAsync")]
 		public async Task<ActionResult<ItemReadDTO>> GetItemForUserAsync(Guid userId, Guid itemId)
 		{
-			if (!await _itemsRepository.IsUserExist(userId))
+			if (!await _itemsRepository.IsUserExistAsync(userId))
 			{
 				return NotFound();
 			}
@@ -52,7 +52,7 @@ namespace FindX.WebApi.Controllers
 		[HttpPost]
 		public async Task<ActionResult<IEnumerable<ItemReadDTO>>> PostUserItem(Guid userId, ItemCreateDTO newItem)
 		{
-			if (!await _itemsRepository.IsUserExist(userId))
+			if (!await _itemsRepository.IsUserExistAsync(userId))
 			{
 				return NotFound();
 			}
@@ -84,7 +84,7 @@ namespace FindX.WebApi.Controllers
 		[HttpPut("{itemId}")]
 		public async Task<ActionResult> UpdateItemAsync(Guid userId, Guid itemId, ItemUpdateDTO updatedItem)
 		{
-			if (!await _itemsRepository.IsUserExist(userId) ||
+			if (!await _itemsRepository.IsUserExistAsync(userId) ||
 				await _itemsRepository.GetItemForUserAsync(userId, itemId) is null)
 			{
 				return NotFound();
@@ -116,7 +116,7 @@ namespace FindX.WebApi.Controllers
 		[HttpDelete("{itemId}")]
 		public async Task<ActionResult> DeleteUserItem(Guid userId, Guid itemId)
 		{
-			if (!await _itemsRepository.IsUserExist(userId) ||
+			if (!await _itemsRepository.IsUserExistAsync(userId) ||
 				await _itemsRepository.GetItemForUserAsync(userId, itemId) is null)
 			{
 				return NotFound();

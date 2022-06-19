@@ -9,16 +9,24 @@ namespace FindX.WebApi.Controllers;
 [ApiController]
 public class ChatHistoryController : ControllerBase
 {
-	private IConversationRepository _conversationRepository;
+	private readonly IConversationRepository _conversationRepository;
+	private readonly IUserItemsRepository _userItemsRepository;
 
-	public ChatHistoryController(IConversationRepository conversationRepository)
+	public ChatHistoryController(
+		IConversationRepository conversationRepository,
+		IUserItemsRepository userItemsRepository)
 	{
 		_conversationRepository = conversationRepository;
+		_userItemsRepository = userItemsRepository;
 	}
 
 	[HttpGet]
 	public async Task<ActionResult<IEnumerable<PopulatedConversation>>> GetUserConversationsAsync(Guid userId)
 	{
+		if (!await _userItemsRepository.IsUserExistAsync(userId))
+		{
+			return NotFound();
+		}
 		var conversations = await _conversationRepository.
 			GetUserConversationsAsync(userId);
 		return Ok(conversations);
