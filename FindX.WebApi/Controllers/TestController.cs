@@ -42,7 +42,7 @@ namespace FindX.WebApi.Controllers
 		}
 		// GET: api/<TestController>
 		[HttpGet]
-		public async Task<ActionResult> Get()
+		public async Task<ActionResult> Get(Item iii)
 		{
 			//var pipelineStage = new BsonDocument
 			//	{
@@ -69,7 +69,7 @@ namespace FindX.WebApi.Controllers
 			//return Ok(docs);
 
 			//await _context.Conversations.InsertOneAsync(new Conversation());
-			await _conversationRepository.GetUserConversationsAsync(new Guid("ab34115c-bd2f-4ec2-abbc-c5646cd62ecb"));
+			//await _conversationRepository.GetUserConversationsAsync(new Guid("ab34115c-bd2f-4ec2-abbc-c5646cd62ecb"));
 			//await _conversationRepository.SaveToUserChatHistoryAsync(
 			//	new Guid("ab34115c-bd2f-4ec2-abbc-c5646cd62ecb"),
 			//	new Guid("557e746a-694b-4dc2-80fb-fe25d6b880b6"),
@@ -81,6 +81,20 @@ namespace FindX.WebApi.Controllers
 			//		SenderId = new Guid("ab34115c-bd2f-4ec2-abbc-c5646cd62ecb"),
 			//	}
 			//	);
+
+			var item = new Item()
+			{
+				Title = "title",
+				Date = DateTime.Now,
+				Latitude = Guid.NewGuid().ToString(),
+				Longitude = Guid.NewGuid().ToString(),
+				Location = Guid.NewGuid().ToString(),
+				IsLost = false,
+				SuperCategory = Guid.NewGuid().ToString(),
+				SubCategory = Guid.NewGuid().ToString(),
+				UserId = Guid.NewGuid(),
+			};
+			await _context.Items.InsertOneAsync(item);
 			return NoContent();
 		}
 
