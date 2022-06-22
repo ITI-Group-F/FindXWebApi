@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FindX.WebApi.DTOs.User;
 using FindX.WebApi.Extenstions;
 using FindX.WebApi.Models;
 using FindX.WebApi.Models.Chat;
@@ -83,7 +84,7 @@ namespace FindX.WebApi.Repositories.Repository
 				.Find(convFilter)
 				.ToListAsync();
 			var popConvs = _mapper.Map<List<PopulatedConversation>>(convs);
-			var cashed = new Dictionary<Guid, ApplicationUser>();
+			var cashed = new Dictionary<Guid, ChatUserReadDto>();
 			for (int i = 0; i < convs.Count; i++)
 			{
 				if (cashed.ContainsKey(convs[i].SenderId))
@@ -94,8 +95,9 @@ namespace FindX.WebApi.Repositories.Repository
 				{
 					var userFilter = _userFilterBuilder.Eq(u => u.Id, convs[i].SenderId);
 					var user = await _context.Users.Find(userFilter).SingleOrDefaultAsync();
-					popConvs[i].Sender = user;
-					cashed[convs[i].SenderId] = user;
+					var chatUser = _mapper.Map<ChatUserReadDto>(user);
+					popConvs[i].Sender = chatUser;
+					cashed[convs[i].SenderId] = chatUser;
 				}
 				if (cashed.ContainsKey(convs[i].ReceiverId))
 				{
@@ -105,8 +107,9 @@ namespace FindX.WebApi.Repositories.Repository
 				{
 					var userFilter = _userFilterBuilder.Eq(u => u.Id, convs[i].ReceiverId);
 					var user = await _context.Users.Find(userFilter).SingleOrDefaultAsync();
-					popConvs[i].Receiver = user;
-					cashed[convs[i].ReceiverId] = user;
+					var chatUser = _mapper.Map<ChatUserReadDto>(user);
+					popConvs[i].Receiver = chatUser;
+					cashed[convs[i].ReceiverId] = chatUser;
 				}
 			}
 			return popConvs;
