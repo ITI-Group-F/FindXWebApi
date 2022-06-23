@@ -13,14 +13,14 @@ public class ChatHub : Hub
 		_conversationRepository = conversationRepository;
 	}
 
-	public override Task OnConnectedAsync()
+	public async Task CreatePrivateGroupForUserAsync(string userId)
 	{
-		Groups.AddToGroupAsync(Context.ConnectionId, Context.User.Identity.Name);
-		return base.OnConnectedAsync();
+		await Groups.AddToGroupAsync(Context.ConnectionId, userId);
 	}
 
 	public async Task SendMessageToGroupAsync(string sender, string receiver, string message)
 	{
+		await Clients.Group(receiver).SendAsync("ReceiveMessage", sender, message);
 		await _conversationRepository.SaveToUserChatHistoryAsync(
 			new Guid(sender),
 			new Guid(receiver),
@@ -31,6 +31,5 @@ public class ChatHub : Hub
 				SendDate = DateTime.Now,
 				SenderId = new Guid(sender),
 			});
-		await Clients.Group(receiver).SendAsync("ReceiveMessage", sender, message);
 	}
 }

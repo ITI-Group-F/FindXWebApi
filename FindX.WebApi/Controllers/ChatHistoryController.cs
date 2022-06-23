@@ -1,11 +1,12 @@
-﻿using FindX.WebApi.Models.Populated;
+﻿using FindX.WebApi.DTOs.Chat;
+using FindX.WebApi.Models.Populated;
 using FindX.WebApi.Repositories.IRepository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FindX.WebApi.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/[controller]/{userId}")]
 [ApiController]
 public class ChatHistoryController : ControllerBase
 {
@@ -21,7 +22,7 @@ public class ChatHistoryController : ControllerBase
 	}
 
 	[HttpGet]
-	public async Task<ActionResult<IEnumerable<ConversationLookUp>>> GetUserConversationsAsync(Guid userId)
+	public async Task<ActionResult<IEnumerable<PopulatedConversationReadDto>>> GetUserConversationsAsync(Guid userId)
 	{
 		if (!await _userItemsRepository.IsUserExistAsync(userId))
 		{

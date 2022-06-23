@@ -62,8 +62,12 @@ namespace FindX.WebApi.Repositories.Repository
 			//	on convId equals conv.Id
 			//	select conv;
 
-			var conversationsFilter = _convFilterBuilder.Eq(c => c.SenderId, senderId)
-				& _convFilterBuilder.Eq(c => c.ReceiverId, receiverId);
+			var conversationsFilter = (
+				_convFilterBuilder.Eq(c => c.SenderId, senderId)
+				& _convFilterBuilder.Eq(c => c.ReceiverId, receiverId))
+				| (
+				_convFilterBuilder.Eq(c => c.SenderId, receiverId)
+				| _convFilterBuilder.Eq(c => c.ReceiverId, senderId));
 
 			var userConversation = await _context.Conversations
 				.Find(conversationsFilter)
