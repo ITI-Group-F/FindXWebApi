@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FindX.WebApi.DTOs.Chat;
 using FindX.WebApi.DTOs.User;
 using FindX.WebApi.Extenstions;
 using FindX.WebApi.Models;
@@ -76,43 +77,68 @@ namespace FindX.WebApi.Repositories.Repository
 			await AddMessageToConversation(message, userConversation.Id);
 		}
 
-		public async Task<IEnumerable<PopulatedConversation>> GetUserConversationsAsync(Guid userId)
+		public async Task<IEnumerable<PopulatedConversationReadDto>> GetUserConversationsAsync(Guid userId)
 		{
 			var convFilter = _convFilterBuilder.Eq(c => c.SenderId, userId)
 				| _convFilterBuilder.Eq(c => c.ReceiverId, userId);
-			var convs = await _context.Conversations
-				.Find(convFilter)
+
+			var lookConvs = await _context.Conversations
+				.Aggregate()
+				.Match(convFilter)
+				.Lookup<Conversation, ApplicationUser, ConversationLookUp>
+				(_context.Users,
+				x => x.SenderId,
+				x => x.Id,
+				x => x.Sender)
+				.Lookup<ConversationLookUp, ApplicationUser, ConversationLookUp>
+				(_context.Users,
+				x => x.ReceiverId,
+				x => x.Id,
+				x => x.Receiver)
 				.ToListAsync();
-			var popConvs = _mapper.Map<List<PopulatedConversation>>(convs);
-			var cashed = new Dictionary<Guid, ChatUserReadDto>();
-			for (int i = 0; i < convs.Count; i++)
+
+			var convs = _mapper.Map<List<PopulatedConversationReadDto>>(lookConvs);
+			for (int i = 0; i < lookConvs.Count; i++)
 			{
-				if (cashed.ContainsKey(convs[i].SenderId))
-				{
-					popConvs[i].Sender = cashed[convs[i].SenderId];
-				}
-				else
-				{
-					var userFilter = _userFilterBuilder.Eq(u => u.Id, convs[i].SenderId);
-					var user = await _context.Users.Find(userFilter).SingleOrDefaultAsync();
-					var chatUser = _mapper.Map<ChatUserReadDto>(user);
-					popConvs[i].Sender = chatUser;
-					cashed[convs[i].SenderId] = chatUser;
-				}
-				if (cashed.ContainsKey(convs[i].ReceiverId))
-				{
-					popConvs[i].Receiver = cashed[convs[i].SenderId];
-				}
-				else
-				{
-					var userFilter = _userFilterBuilder.Eq(u => u.Id, convs[i].ReceiverId);
-					var user = await _context.Users.Find(userFilter).SingleOrDefaultAsync();
-					var chatUser = _mapper.Map<ChatUserReadDto>(user);
-					popConvs[i].Receiver = chatUser;
-					cashed[convs[i].ReceiverId] = chatUser;
-				}
+				convs[i].Sender = _mapper.Map<UserReadDto>(lookConvs[i].Sender[0]);
+				convs[i].Receiver = _mapper.Map<UserReadDto>(lookConvs[i].Receiver[0]);
 			}
-			return popConvs;
+
+			return convs;
+
+			//var convs = await _context.Conversations
+			//	.Find(convFilter)
+			//	.ToListAsync();
+			//var popConvs = _mapper.Map<List<ConversationLookUp>>(convs);
+			//var cashed = new Dictionary<Guid, ChatUserReadDto>();
+			//for (int i = 0; i < convs.Count; i++)
+			//{
+			//	if (cashed.ContainsKey(convs[i].SenderId))
+			//	{
+			//		popConvs[i].Sender = cashed[convs[i].SenderId];
+			//	}
+			//	else
+			//	{
+			//		var userFilter = _userFilterBuilder.Eq(u => u.Id, convs[i].SenderId);
+			//		var user = await _context.Users.Find(userFilter).SingleOrDefaultAsync();
+			//		var chatUser = _mapper.Map<ChatUserReadDto>(user);
+			//		popConvs[i].Sender = chatUser;
+			//		cashed[convs[i].SenderId] = chatUser;
+			//	}
+			//	if (cashed.ContainsKey(convs[i].ReceiverId))
+			//	{
+			//		popConvs[i].Receiver = cashed[convs[i].SenderId];
+			//	}
+			//	else
+			//	{
+			//		var userFilter = _userFilterBuilder.Eq(u => u.Id, convs[i].ReceiverId);
+			//		var user = await _context.Users.Find(userFilter).SingleOrDefaultAsync();
+			//		var chatUser = _mapper.Map<ChatUserReadDto>(user);
+			//		popConvs[i].Receiver = chatUser;
+			//		cashed[convs[i].ReceiverId] = chatUser;
+			//	}
+			//}
+			//return popConvs;
 		}
 	}
 }

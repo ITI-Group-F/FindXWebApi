@@ -1,6 +1,6 @@
 ﻿namespace FindX.WebApi.DTOs.User;
 
-public class ChatUserReadDto
+public class UserReadDto
 {
 	public Guid Id { get; set; }
 	public string FirstName { get; set; }

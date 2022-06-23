@@ -21,7 +21,7 @@ public class ChatHistoryController : ControllerBase
 	}
 
 	[HttpGet]
-	public async Task<ActionResult<IEnumerable<PopulatedConversation>>> GetUserConversationsAsync(Guid userId)
+	public async Task<ActionResult<IEnumerable<ConversationLookUp>>> GetUserConversationsAsync(Guid userId)
 	{
 		if (!await _userItemsRepository.IsUserExistAsync(userId))
 		{

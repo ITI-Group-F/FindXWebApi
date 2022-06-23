@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FindX.WebApi.DTOs.Chat;
 using FindX.WebApi.Models.Chat;
 using FindX.WebApi.Models.Populated;
 
@@ -8,6 +9,8 @@ public class ConversationProfile : Profile
 {
 	public ConversationProfile()
 	{
-		CreateMap<Conversation, PopulatedConversation>();
+		CreateMap<ConversationLookUp, PopulatedConversationReadDto>()
+			.ForMember(x => x.Receiver, opt => opt.Ignore())
+			.ForMember(x => x.Sender, opt => opt.Ignore());
 	}
 }

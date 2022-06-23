@@ -8,6 +8,6 @@ public class UserProfile : Profile
 {
 	public UserProfile()
 	{
-		CreateMap<ApplicationUser, ChatUserReadDto>();
+		CreateMap<ApplicationUser, UserReadDto>();
 	}
 }
