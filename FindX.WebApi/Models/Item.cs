@@ -34,14 +34,14 @@ namespace FindX.WebApi.Models
 		public string Brand { get; set; }
 		[BsonIgnoreIfNull]
 		public string Model { get; set; }
-		[BsonIgnoreIfNull]
+		[BsonIgnoreIfDefault]
 		public DateTime ModelYear { get; set; }
 		[BsonIgnoreIfNull]
 		public string Color { get; set; }
 
 		[BsonIgnoreIfNull]
 		public string Species { get; set; }
-		[BsonIgnoreIfNull]
+		[BsonIgnoreIfDefault]
 		public int Age { get; set; }
 	}
 }

@@ -7,6 +7,7 @@ using MongoDB.Bson;
 using FindX.WebApi.Repositories.IRepository;
 using FindX.WebApi.Services;
 using FindX.WebApi.Models.Chat;
+using FindX.WebApi.DTOs;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace FindX.WebApi.Controllers
@@ -69,7 +70,7 @@ namespace FindX.WebApi.Controllers
 			//return Ok(docs);
 
 			//await _context.Conversations.InsertOneAsync(new Conversation());
-			var res = await _conversationRepository.GetUserConversationsAsync(new Guid("ab34115c-bd2f-4ec2-abbc-c5646cd62ecb"));
+			//var res = await _conversationRepository.GetUserConversationsAsync(new Guid("ab34115c-bd2f-4ec2-abbc-c5646cd62ecb"));
 			//await _conversationRepository.SaveToUserChatHistoryAsync(
 			//	new Guid("ab34115c-bd2f-4ec2-abbc-c5646cd62ecb"),
 			//	new Guid("557e746a-694b-4dc2-80fb-fe25d6b880b6"),
@@ -95,7 +96,9 @@ namespace FindX.WebApi.Controllers
 			//	UserId = Guid.NewGuid(),
 			//};
 			//await _context.Items.InsertOneAsync(item);
-			return Ok(res);
+			var items = await _context.Items.Find(new BsonDocument()).ToListAsync();
+			var dto = _mapper.Map<IEnumerable<ItemReadDTO>>(items);
+			return Ok(dto);
 		}
 
 		// GET api/<TestController>/5

@@ -1,9 +1,9 @@
-﻿using Newtonsoft.Json;
-using JsonSerialization = System.Text.Json.Serialization;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace FindX.WebApi.DTOs;
 
-[JsonObject(ItemNullValueHandling = NullValueHandling.Ignore)]
+//[JsonObject(ItemNullValueHandling = NullValueHandling.Ignore)]
 public class ItemReadDTO
 {
 	public Guid Id { get; set; }
@@ -19,13 +19,17 @@ public class ItemReadDTO
 	public string SuperCategory { get; set; }
 	public Guid UserId { get; set; }
 
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public string Brand { get; set; }
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public string Model { get; set; }
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
 	public DateTime ModelYear { get; set; }
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public string Color { get; set; }
 
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public string Species { get; set; }
-	[JsonSerialization.JsonIgnore(Condition =
-		JsonSerialization.JsonIgnoreCondition.WhenWritingDefault)]
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
 	public int Age { get; set; }
 }
