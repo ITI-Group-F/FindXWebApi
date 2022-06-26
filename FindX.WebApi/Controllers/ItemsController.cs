@@ -29,7 +29,7 @@ public class ItemsController : ControllerBase
 	}
 
 	[HttpGet]
-	[Route("undersub")]
+	[Route("undersub/{subcategory}")]
 	public async Task<ActionResult<IEnumerable<ItemReadDTO>>> GetItemsUnderSubCategoryAsync(string subcategory)
 	{
 		if (SubCategories.IsExists(subcategory))
@@ -45,7 +45,7 @@ public class ItemsController : ControllerBase
 	}
 
 	[HttpGet]
-	[Route("undersup")]
+	[Route("undersup/{supercategory}")]
 	public async Task<ActionResult<IEnumerable<ItemReadDTO>>> GetItemsUnderSuperCategoryAsync(string supercategory)
 	{
 		if (SuperCategories.IsExists(supercategory))
