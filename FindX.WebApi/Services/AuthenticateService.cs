@@ -24,10 +24,9 @@ namespace FindX.WebApi.Services
 			_configuration = configuration;
 		}
 
-
 		public async Task<UserToken> Login(LoginDto model)
 		{
-			var user = await _userManager.FindByNameAsync(model.Username);
+			var user = await _userManager.FindByEmailAsync(model.Email);
 			if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
 			{
 				return await GenerateJwtToken(user);
@@ -37,7 +36,7 @@ namespace FindX.WebApi.Services
 
 		public async Task<UserToken> Register(RegisterDto model)
 		{
-			var userExists = await _userManager.FindByNameAsync(model.Username);
+			var userExists = await _userManager.FindByEmailAsync(model.Email);
 			if (userExists != null)
 			{
 				return null;

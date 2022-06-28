@@ -50,7 +50,7 @@ public class UserItemsController : ControllerBase
 	}
 
 	[HttpPost]
-	public async Task<ActionResult<IEnumerable<ItemReadDTO>>> PostUserItem(Guid userId, ItemCreateDTO newItem)
+	public async Task<ActionResult<IEnumerable<ItemReadDTO>>> PostUserItem(Guid userId, [FromForm] ItemCreateDTO newItem)
 	{
 		if (!await _itemsRepository.IsUserExistAsync(userId))
 		{
@@ -61,12 +61,17 @@ public class UserItemsController : ControllerBase
 		{
 			return NotFound("Sub category not found!");
 		}
+
 		if (!SuperCategories.IsExists(newItem.SuperCategory))
 		{
 			return NotFound("Super category not found!");
 		}
 
 		var item = _mapper.Map<Item>(newItem);
+		foreach (var img in newItem.File)
+		{
+			item.Images.Add(ConvertToBytes(img));
+		}
 		item.Id = Guid.NewGuid();
 		item.UserId = userId;
 		try
@@ -130,5 +135,13 @@ public class UserItemsController : ControllerBase
 		{
 			return StatusCode(StatusCodes.Status500InternalServerError);
 		}
+	}
+
+	private byte[] ConvertToBytes(IFormFile image)
+	{
+		byte[] CoverImageBytes = null;
+		BinaryReader reader = new BinaryReader(image.OpenReadStream());
+		CoverImageBytes = reader.ReadBytes((int)image.Length);
+		return CoverImageBytes;
 	}
 }
