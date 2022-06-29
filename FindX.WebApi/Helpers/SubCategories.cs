@@ -5,27 +5,27 @@ namespace FindX.WebApi.Helpers;
 public static class SubCategories
 {
 	#region Electronics
-	public const string Mobile = "Mobile";
-	public const string Tablet = "Tablet";
-	public const string Laptop = "Laptop";
+	public const string Mobile = "Mobiles";
+	public const string Tablet = "Tablets";
+	public const string Laptop = "Laptops";
 	#endregion
 
 	#region Animals
-	public const string Bird = "Bird";
-	public const string Cat = "Cat";
-	public const string Dog = "Dog";
+	public const string Birds = "Birds";
+	public const string Cats = "Cats";
+	public const string Dogs = "Dogs";
 	#endregion
 
 	#region Belongings
 	public const string PersonalCardsAndPapers = "Personal cards and papers";
-	public const string Wallet = "Wallet";
+	public const string Wallets = "Wallets";
 	public const string Glasses = "Glasses";
 	public const string Money = "Money";
-	public const string Bag = "Bag";
-	public const string Accessory = "Accessory";
+	public const string Bags = "Bags";
+	public const string Accessories = "Accessories";
 	#endregion
 
-	public const string Other = "Other";
+	public const string Other = "other";
 
 	public static bool IsExists(string subCategory)
 	{
