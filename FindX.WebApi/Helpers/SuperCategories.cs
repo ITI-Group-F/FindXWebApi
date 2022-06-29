@@ -11,7 +11,7 @@ public static class SuperCategories
 
 	public static bool IsExists(string superCategory)
 	{
-		Type type = typeof(SubCategories);
+		Type type = typeof(SuperCategories);
 		foreach (var c in type.GetFields(BindingFlags.Static | BindingFlags.Public))
 		{
 			var value = c.GetValue(null);
