@@ -24,7 +24,7 @@ public class ItemReadDTO
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public string Model { get; set; }
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-	public DateTime ModelYear { get; set; }
+	public int ModelYear { get; set; }
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public string Color { get; set; }
 

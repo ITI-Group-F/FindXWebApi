@@ -25,7 +25,7 @@ public static class SubCategories
 	public const string Accessories = "Accessories";
 	#endregion
 
-	public const string Other = "other";
+	public const string Other = "Other";
 
 	public static bool IsExists(string subCategory)
 	{

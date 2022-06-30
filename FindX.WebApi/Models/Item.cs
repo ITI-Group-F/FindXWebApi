@@ -12,6 +12,7 @@ namespace FindX.WebApi.Models
 		public string Title { get; set; }
 		public string Description { get; set; }
 		[Required]
+		[DataType(DataType.Date)]
 		public DateTime Date { get; set; }
 		[Required]
 		public string Longitude { get; set; }
@@ -35,12 +36,9 @@ namespace FindX.WebApi.Models
 		[BsonIgnoreIfNull]
 		public string Model { get; set; }
 		[BsonIgnoreIfDefault]
-		public DateTime ModelYear { get; set; }
+		public int ModelYear { get; set; }
 		[BsonIgnoreIfNull]
 		public string Color { get; set; }
-
-		[BsonIgnoreIfNull]
-		public string Species { get; set; }
 		[BsonIgnoreIfDefault]
 		public int Age { get; set; }
 	}
