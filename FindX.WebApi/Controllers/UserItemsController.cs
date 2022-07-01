@@ -17,9 +17,7 @@ public class UserItemsController : ControllerBase
 	private readonly IUserItemsRepository _itemsRepository;
 	private readonly IMapper _mapper;
 
-	public UserItemsController(
-		IUserItemsRepository itemsRepository,
-		IMapper mapper)
+	public UserItemsController(IUserItemsRepository itemsRepository,IMapper mapper)
 	{
 		_itemsRepository = itemsRepository;
 		_mapper = mapper;
