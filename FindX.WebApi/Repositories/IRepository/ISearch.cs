@@ -1,5 +1,4 @@
 ﻿using FindX.WebApi.Models;
-using MongoDB.Bson;
 
 namespace FindX.WebApi.Repositories.IRepository
 {

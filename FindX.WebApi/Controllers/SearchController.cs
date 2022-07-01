@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using FindX.WebApi.DTOs;
 using FindX.WebApi.Repositories.IRepository;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FindX.WebApi.Controllers
@@ -22,15 +21,7 @@ namespace FindX.WebApi.Controllers
         }
 
 
-        //[HttpGet]
-        //[Route("/{query}")]
-        //public async Task<ActionResult<IEnumerable<ItemReadDTO>>> SearchFor(string query)
-        //{
-        //    var searchResult = await _searchRepository.SearchFinderAsync(query);
-        //    var searchResultDto = _mapper.Map<IEnumerable<ItemReadDTO>>(searchResult);
-        //    return Ok(searchResultDto);
 
-        //}
 
 
 
