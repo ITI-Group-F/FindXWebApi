@@ -19,8 +19,6 @@ namespace FindX.WebApi.Models
 		[Required]
 		public string Latitude { get; set; }
 		[Required]
-		public string Location { get; set; }
-		[Required]
 		public bool IsLost { get; set; }
 		public bool IsClosed { get; set; }
 		public ICollection<byte[]> Images { get; set; } = new HashSet<byte[]>();
@@ -33,8 +31,6 @@ namespace FindX.WebApi.Models
 
 		[BsonIgnoreIfNull]
 		public string Brand { get; set; }
-		[BsonIgnoreIfNull]
-		public string Model { get; set; }
 		[BsonIgnoreIfDefault]
 		public int ModelYear { get; set; }
 		[BsonIgnoreIfNull]

@@ -10,7 +10,7 @@ namespace FindX.WebApi.Extenstions
 		{
 			builder.Services.AddSingleton<IMongoContext, MongoContext>();
 			builder.Services.AddSingleton<IUserItemsRepository, UserItemsRepository>();
-			builder.Services.AddSingleton<ISearch, Search>();
+			builder.Services.AddSingleton<ISearchRepository, SearchRepository>();
 			builder.Services.AddScoped<IAuthenticateService, AuthenticateService>();
 			builder.Services.AddSingleton<IItemsRepository, ItemsRepository>();
 			builder.Services.AddSingleton<IConversationRepository, ConversationRepository>();
