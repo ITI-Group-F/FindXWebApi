@@ -22,9 +22,19 @@ namespace FindX.WebApi.Controllers
 
 		[HttpGet]
 		[Route("{query}")]
-		public async Task<ActionResult<IEnumerable<ItemReadDTO>>> SearchFor(string query)
+		public async Task<ActionResult<IEnumerable<AutoCompleteReadDto>>> SearchFor(string query)
 		{
 			var searchResult = await _searchRepository.SearchFinderAsync(query);
+			var searchResultDto = _mapper.Map<IEnumerable<AutoCompleteReadDto>>(searchResult);
+			return Ok(searchResultDto);
+		}
+
+
+		[HttpGet]
+		[Route("full/{query}")]
+		public async Task<ActionResult<IEnumerable<ItemReadDTO>>> FullSearchFor(string query)
+		{
+			var searchResult = await _searchRepository.FullSearchFinderAsync(query);
 			var searchResultDto = _mapper.Map<IEnumerable<ItemReadDTO>>(searchResult);
 			return Ok(searchResultDto);
 		}
