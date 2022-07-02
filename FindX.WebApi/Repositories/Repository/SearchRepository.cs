@@ -1,5 +1,4 @@
-﻿using FindX.WebApi.DTOs;
-using FindX.WebApi.Models;
+﻿using FindX.WebApi.Models;
 using FindX.WebApi.Repositories.IRepository;
 using FindX.WebApi.Services;
 using MongoDB.Bson;

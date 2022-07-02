@@ -19,6 +19,8 @@ namespace FindX.WebApi.Models
 		[Required]
 		public string Latitude { get; set; }
 		[Required]
+		public string Location { get; set; }
+		[Required]
 		public bool IsLost { get; set; }
 		public bool IsClosed { get; set; }
 		public ICollection<byte[]> Images { get; set; } = new HashSet<byte[]>();
