@@ -17,7 +17,7 @@ public class UserItemsController : ControllerBase
 	private readonly IUserItemsRepository _itemsRepository;
 	private readonly IMapper _mapper;
 
-	public UserItemsController(IUserItemsRepository itemsRepository,IMapper mapper)
+	public UserItemsController(IUserItemsRepository itemsRepository, IMapper mapper)
 	{
 		_itemsRepository = itemsRepository;
 		_mapper = mapper;
@@ -66,10 +66,14 @@ public class UserItemsController : ControllerBase
 		}
 
 		var item = _mapper.Map<Item>(newItem);
-		foreach (var img in newItem.File)
+		if (newItem.File is not null)
 		{
-			item.Images.Add(ConvertToBytes(img));
+			foreach (var img in newItem.File)
+			{
+				item.Images.Add(ConvertToBytes(img));
+			}
 		}
+
 		item.Id = Guid.NewGuid();
 		item.UserId = userId;
 		try

@@ -12,7 +12,6 @@ public class ItemCreateDTO
 	public string Latitude { get; set; }
 	public string Location { get; set; }
 	public bool IsLost { get; set; }
-	public bool IsClosed { get; set; }
 	public IList<IFormFile> File { get; set; }
 	public string SubCategory { get; set; }
 	public string SuperCategory { get; set; }
