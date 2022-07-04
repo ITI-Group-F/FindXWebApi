@@ -108,7 +108,7 @@ namespace FindX.WebApi.Services
 			var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:PrivateKey"]));
 
 			var token = new JwtSecurityToken(
-					expires: DateTime.Now.AddHours(3),
+					expires: DateTime.Now.AddHours(12),
 					claims: authClaims,
 					signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
 					);
