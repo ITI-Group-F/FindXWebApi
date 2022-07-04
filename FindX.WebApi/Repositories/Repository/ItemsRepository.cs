@@ -38,5 +38,12 @@ public class ItemsRepository : IItemsRepository
 		return await _context.Items.Find(Filter).ToListAsync();
 
 	}
+
+
+	public async Task<Item> GetItemsUnderItemIdAsync(Guid Id)
+    {
+		return await _context.Items.Find(i => i.Id == Id).FirstOrDefaultAsync();
+
+	}
 }
 

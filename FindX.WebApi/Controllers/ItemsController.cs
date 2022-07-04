@@ -59,4 +59,32 @@ public class ItemsController : ControllerBase
 			return NotFound();
 		}
 	}
+
+	[HttpGet]
+	[Route("underid/{id}")]
+	public async Task<ActionResult<ItemReadDTO>> GetItemsUnderItemIdAsync(Guid id)
+    {
+
+        try
+        {
+		var item = await _itemsRepository.GetItemsUnderItemIdAsync(id);
+		var itemsDto = _mapper.Map<ItemReadDTO>(item);
+			if (item == null)
+			{
+
+				return NotFound();
+			}
+
+			return Ok(item);
+
+		}
+		catch
+        {
+
+		 return StatusCode(StatusCodes.Status500InternalServerError);
+		}
+		
+
+    }
+
 }
