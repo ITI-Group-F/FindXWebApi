@@ -61,30 +61,15 @@ public class ItemsController : ControllerBase
 	}
 
 	[HttpGet]
-	[Route("underid/{id}")]
-	public async Task<ActionResult<ItemReadDTO>> GetItemsUnderItemIdAsync(Guid id)
-    {
-
-        try
-        {
+	[Route("{id}")]
+	public async Task<ActionResult<ItemReadDTO>> GetItemByIdAsync(Guid id)
+	{
 		var item = await _itemsRepository.GetItemsUnderItemIdAsync(id);
-		var itemsDto = _mapper.Map<ItemReadDTO>(item);
-			if (item == null)
-			{
-
-				return NotFound();
-			}
-
-			return Ok(item);
-
+		if (item is null)
+		{
+			return NotFound();
 		}
-		catch
-        {
-
-		 return StatusCode(StatusCodes.Status500InternalServerError);
-		}
-		
-
-    }
-
+		var itemDto = _mapper.Map<ItemReadDTO>(item);
+		return Ok(itemDto);
+	}
 }
