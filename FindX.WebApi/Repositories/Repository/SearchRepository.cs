@@ -52,35 +52,25 @@ namespace FindX.WebApi.Repositories.Repository
 
 		public async Task<IEnumerable<Item>> FullSearchFinderAsync(string query)
 		{
-			var searchPipe = new BsonDocument[]
-			{
-			new BsonDocument("$search",
-					new BsonDocument {
-					{
-						"index",
-						"searchItems"
-					},
-					{
-						"text",
-						new BsonDocument {
+			var pipeLine = new BsonDocument[]
+				{
+					new BsonDocument("$search",
+					new BsonDocument
 							{
-								"query",
-								"{\"title\": {$eq: " + query + "}}"
-							},
-							{
-								"path",
-								new BsonDocument("wildcard", "*")
-							},
-							{
-								"fuzzy",
-								new BsonDocument()
-							}
-						}
-					}
-			})};
+									{ "index", "BebarsSearch" },
+									{ "autocomplete",
+					new BsonDocument
+									{
+											{ "path", "Title" },
+											{ "query", ""+query+"" },
+											{ "fuzzy",
+					new BsonDocument("maxEdits", 1) }
+									} }
+							})
+				};
 
 			return await _context.Items
-				.Aggregate<Item>(searchPipe)
+				.Aggregate<Item>(pipeLine)
 				.ToListAsync();
 		}
 	}
