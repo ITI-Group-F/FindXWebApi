@@ -128,7 +128,7 @@ namespace FindX.WebApi.Services
                         new Claim("userId", user.Id.ToString()),
                         new Claim("userName", user.UserName),
                         new Claim("email", user.Email),
-                        new Claim("fullName ", user.FirstName + " " + user.LastName),
+                        new Claim("fullName", user.FirstName + " " + user.LastName),
                 };
 
             foreach (var userRole in userRoles)
