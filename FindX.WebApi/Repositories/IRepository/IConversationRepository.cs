@@ -6,6 +6,8 @@ namespace FindX.WebApi.Repositories.IRepository;
 
 public interface IConversationRepository
 {
-	Task SaveToUserChatHistoryAsync(Guid senderId, Guid receiverId, Message message);
-	Task<IEnumerable<PopulatedConversationReadDto>> GetUserConversationsAsync(Guid userId);
+    Task SaveToUserChatHistoryAsync(Guid senderId, Guid receiverId, Message message);
+    Task<IEnumerable<PopulatedConversationReadDto>> GetUserConversationsAsync(Guid userId);
+
+    Task SetMessageAsSeen(Guid userid, Guid convid);
 }
