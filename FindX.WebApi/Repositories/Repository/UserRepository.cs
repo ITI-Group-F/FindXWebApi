@@ -42,9 +42,16 @@ namespace FindX.WebApi.Repositories.Repository
                 .Set(x => x.PhoneNumber, user.Phone)
                 .Set(x => x.Phone, user.Phone)                
                 .Set(x => x.NormalizedEmail, user.Email.ToUpper()));
+            if (!(string.IsNullOrEmpty(user.Password)
+                &&
+                string.IsNullOrEmpty(user.CPassword))) 
+            {
                 string HashedPassword = _userManager.PasswordHasher.HashPassword(update, user.Password);
-            var updatePassword = await _context.Users.FindOneAndUpdateAsync(filter,
-                Builders<ApplicationUser>.Update.Set(x => x.PasswordHash, HashedPassword));                        
+                var updatePassword = await _context.Users.FindOneAndUpdateAsync(filter,
+                    Builders<ApplicationUser>.Update.Set(x => x.PasswordHash, HashedPassword));
+            }
+               
+            
             return update;
         }
     }
