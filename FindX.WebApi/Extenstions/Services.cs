@@ -14,6 +14,7 @@ namespace FindX.WebApi.Extenstions
 			builder.Services.AddScoped<IAuthenticateService, AuthenticateService>();
 			builder.Services.AddSingleton<IItemsRepository, ItemsRepository>();
 			builder.Services.AddSingleton<IConversationRepository, ConversationRepository>();
+			builder.Services.AddScoped<IUserRepository, UserRepository>();
 		}
 	}
 }
