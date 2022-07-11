@@ -43,7 +43,7 @@ namespace FindX.WebApi.Repositories.Repository
                 .Set(x => x.Phone, user.Phone)                
                 .Set(x => x.NormalizedEmail, user.Email.ToUpper()));
             if (!(string.IsNullOrEmpty(user.Password)
-                &&
+                ||
                 string.IsNullOrEmpty(user.CPassword))) 
             {
                 string HashedPassword = _userManager.PasswordHasher.HashPassword(update, user.Password);

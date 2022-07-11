@@ -9,7 +9,7 @@ namespace FindX.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admin,User")]
+    //[Authorize(Roles = "Admin,User")]
     public class UserController : ControllerBase
     {
         private readonly IUserRepository _usersRepository;
