@@ -129,6 +129,9 @@ namespace FindX.WebApi.Services
                         new Claim("userName", user.UserName),
                         new Claim("email", user.Email),
                         new Claim("fullName", user.FirstName + " " + user.LastName),
+                        new Claim("phone", string.IsNullOrEmpty(user.PhoneNumber)  ? user.Phone: user.PhoneNumber),
+                        new Claim("firstname", user.FirstName),
+                        new Claim("lasttname", user.LastName),
                 };
 
             foreach (var userRole in userRoles)
@@ -142,12 +145,7 @@ namespace FindX.WebApi.Services
             {
                 Token = new JwtSecurityTokenHandler().WriteToken(token),
                 Expiration = token.ValidTo,
-                DisplayName = user.FirstName + " " + user.LastName,
-                Phone = user.PhoneNumber,
-                Email = user.Email,
-                UserID = user.Id,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
+                
             };
         }
     }
@@ -156,12 +154,6 @@ namespace FindX.WebApi.Services
     {
         public string Token { get; set; }
         public DateTime Expiration { get; set; }
-        public string Message { get; set; }
-        public string Email { get; set; }
-        public string DisplayName { get; set; }
-        public string FirstName{ get; set; }
-        public string LastName { get; set; }
-        public string Phone { get; set; }
-        public Guid UserID { get; set; }
+        public string Message { get; set; }        
     }
 }
