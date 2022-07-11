@@ -7,9 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FindX.WebApi.Controllers
 {
+    [Authorize(Roles = "Admin,User")]
     [Route("api/[controller]")]
-    [ApiController]
-    //[Authorize(Roles = "Admin,User")]
+    [ApiController]    
     public class UserController : ControllerBase
     {
         private readonly IUserRepository _usersRepository;

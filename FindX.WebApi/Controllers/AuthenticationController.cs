@@ -22,7 +22,7 @@ public class AuthenticationController : ControllerBase
 	{
 		var result = await _Authenticate.Login(model);
 		if (result != null)
-		{
+		{			
 			return Ok(result);
 		}
 		return BadRequest("Wrong user name or password");
