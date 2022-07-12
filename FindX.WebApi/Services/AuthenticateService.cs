@@ -49,7 +49,9 @@ namespace FindX.WebApi.Services
                 SecurityStamp = Guid.NewGuid().ToString(),
                 UserName = model.Username,
                 FirstName = model.FirstName,
-                LastName = model.LastName
+                LastName = model.LastName,
+                Phone = model.Phone,
+                PhoneNumber = model.Phone
             };
             var result = await _userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
@@ -73,7 +75,9 @@ namespace FindX.WebApi.Services
                 SecurityStamp = Guid.NewGuid().ToString(),
                 UserName = model.Username,
                 FirstName = model.FirstName,
-                LastName = model.LastName
+                LastName = model.LastName,
+                Phone = model.Phone,
+                PhoneNumber = model.Phone
             };
             var result = await _userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
@@ -129,7 +133,7 @@ namespace FindX.WebApi.Services
                         new Claim("userName", user.UserName),
                         new Claim("email", user.Email),
                         new Claim("fullName", user.FirstName + " " + user.LastName),
-                        new Claim("phone", string.IsNullOrEmpty(user.PhoneNumber)  ? user.Phone: user.PhoneNumber),
+                        new Claim("phone", user.Phone),
                         new Claim("firstname", user.FirstName),
                         new Claim("lasttname", user.LastName),
                 };

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using FindX.WebApi.DTOs;
 using FindX.WebApi.Services;
+using System.Text.RegularExpressions;
 
 namespace FindX.WebApi.Controllers;
 
@@ -32,25 +33,35 @@ public class AuthenticationController : ControllerBase
 	[Route("register-user")]
 	public async Task<IActionResult> Register(RegisterDto model)
 	{
+		if (!Regex.IsMatch(model.Password, @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$")) {
+			return BadRequest("Incorrect password format (Minimum eight characters," +
+                " at least one uppercase letter, one lowercase letter, one number and one special character is required)");
+		}
 		var result = await _Authenticate.Register(model);
 		if (result != null)
 		{
 			return Ok(result);
-		}
-		return BadRequest("User maybe exists or incorrect password format");
-	}
+        }
+        return BadRequest("User with the same email exists !!");
 
-	[Authorize(Roles = "Admin")]
+    }
+
+    [Authorize(Roles = "Admin")]
 	[HttpPost]
 	[Route("register-admin")]
 	public async Task<IActionResult> RegisterAdmin(RegisterDto model)
 	{
+		if (!Regex.IsMatch(model.Password, @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"))
+		{
+			return BadRequest("Incorrect password format (Minimum eight characters," +
+				" at least one uppercase letter, one lowercase letter, one number and one special character is required)");
+		}
 		var result = await _Authenticate.RegisterAdmin(model);
 		if (result != null)
 		{
 			return Ok(result);
 		}
-		return BadRequest("User maybe exists or incorrect password format");
+		return BadRequest("User with the same email exists !!");
 	}
 
 	[Authorize(Roles = "Admin")]
