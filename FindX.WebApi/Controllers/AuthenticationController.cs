@@ -36,7 +36,28 @@ public class AuthenticationController : ControllerBase
 		if (!Regex.IsMatch(model.Password, @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$")) {
 			return BadRequest("Incorrect password format (Minimum eight characters," +
                 " at least one uppercase letter, one lowercase letter, one number and one special character is required)");
+		}		
+		if (string.IsNullOrEmpty(model.Email))
+		{
+			return BadRequest("Email is empty !!");
 		}
+		if (string.IsNullOrEmpty(model.FirstName))
+		{
+			return BadRequest("FirstName is empty !!");
+		}
+		if (string.IsNullOrEmpty(model.LastName))
+		{
+			return BadRequest("LastName is empty !!");
+		}
+		if (string.IsNullOrEmpty(model.Phone))
+		{
+			return BadRequest("PhoneNumber is empty !!");
+		}
+		if (string.IsNullOrEmpty(model.Password))
+		{
+			return BadRequest("Password is empty !!");
+		}
+
 		var result = await _Authenticate.Register(model);
 		if (result != null)
 		{
@@ -55,6 +76,26 @@ public class AuthenticationController : ControllerBase
 		{
 			return BadRequest("Incorrect password format (Minimum eight characters," +
 				" at least one uppercase letter, one lowercase letter, one number and one special character is required)");
+		}
+		if (string.IsNullOrEmpty(model.Email))
+		{
+			return BadRequest("Email is empty !!");
+		}
+		if (string.IsNullOrEmpty(model.FirstName))
+		{
+			return BadRequest("FirstName is empty !!");
+		}
+		if (string.IsNullOrEmpty(model.LastName))
+		{
+			return BadRequest("LastName is empty !!");
+		}
+		if (string.IsNullOrEmpty(model.Phone))
+		{
+			return BadRequest("PhoneNumber is empty !!");
+		}
+		if (string.IsNullOrEmpty(model.Password))
+		{
+			return BadRequest("Password is empty !!");
 		}
 		var result = await _Authenticate.RegisterAdmin(model);
 		if (result != null)
