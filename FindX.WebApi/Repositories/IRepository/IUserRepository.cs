@@ -7,5 +7,7 @@ namespace FindX.WebApi.Repositories.IRepository
     {
         Task<ApplicationUser> UpdateUserAsync(UserUpdateDto user);
         Task<bool> CheckEmailAsync(Guid userID, string email);
+
+        Task<string> GetUserFullName(Guid userid);
     }
 }
