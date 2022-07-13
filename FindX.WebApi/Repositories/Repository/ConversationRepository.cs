@@ -64,7 +64,7 @@ namespace FindX.WebApi.Repositories.Repository
             var senderFilter = _userFilterBuilder.Eq(u => u.Id, senderId);
             var sender = await _context.Users
                 .Find(senderFilter)
-                .SingleOrDefaultAsync();
+                .FirstOrDefaultAsync();
             if (sender is null)
             {
                 return;
@@ -80,7 +80,7 @@ namespace FindX.WebApi.Repositories.Repository
                 & _convFilterBuilder.Eq(c => c.ReceiverId, receiverId))
                 | (
                 _convFilterBuilder.Eq(c => c.SenderId, receiverId)
-                | _convFilterBuilder.Eq(c => c.ReceiverId, senderId));
+               & _convFilterBuilder.Eq(c => c.ReceiverId, senderId));
 
             var userConversation = await _context.Conversations
                 .Find(conversationsFilter)
