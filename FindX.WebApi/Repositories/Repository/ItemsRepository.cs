@@ -20,13 +20,13 @@ public class ItemsRepository : IItemsRepository
 	public async Task<IEnumerable<Item>> GetItemsAsync()
 	{
 		return await _context.Items
-			.Find(new BsonDocument())
+			.Find(i=>i.IsClosed==false)
 			.ToListAsync();
 	}
 
 	public async Task<IEnumerable<Item>> GetItemsUnderSubCategoryAsync(string subCategory)
 	{
-		var Filter = _filterBuilder.Eq(i => i.SubCategory, subCategory);
+		var Filter = _filterBuilder.Eq(i => i.SubCategory, subCategory)&_filterBuilder.Eq(i=>i.IsClosed,false);
 		return await _context.Items.Find(Filter).ToListAsync();
 		
 		 
@@ -34,7 +34,7 @@ public class ItemsRepository : IItemsRepository
 
 	public async Task<IEnumerable<Item>> GetItemsUnderSuperCategoryAsync(string superCategory)
 	{
-		var Filter = _filterBuilder.Eq(i => i.SuperCategory, superCategory);
+		var Filter = _filterBuilder.Eq(i => i.SuperCategory, superCategory) & _filterBuilder.Eq(i => i.IsClosed, false);
 		return await _context.Items.Find(Filter).ToListAsync();
 
 	}

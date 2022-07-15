@@ -14,6 +14,7 @@ public class ItemReadDTO
     public string Latitude { get; set; }
     public string Location { get; set; }
     public bool IsLost { get; set; }
+    public bool IsClosed { get; set; }
     public ICollection<byte[]> Images { get; set; } = new HashSet<byte[]>();
     public string SubCategory { get; set; }
     public string SuperCategory { get; set; }
