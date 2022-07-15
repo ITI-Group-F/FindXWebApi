@@ -82,7 +82,7 @@ public class ItemsController : ControllerBase
 
 
     [HttpGet]
-    [Route("close")]
+    [Route("close/{id}")]
     public async Task<ActionResult> ClosePostAsync(Guid id)
     {
 
