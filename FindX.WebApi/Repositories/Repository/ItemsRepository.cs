@@ -45,5 +45,23 @@ public class ItemsRepository : IItemsRepository
 		return await _context.Items.Find(i => i.Id == Id).FirstOrDefaultAsync();
 
 	}
+
+
+
+
+	public async Task<Item> CloseItem(Guid id)
+	{
+		var Filter = _filterBuilder.Eq(i => i.Id, id);
+
+		var update = Builders<Item>.Update.Set(i => i.IsClosed, true);
+		var options = new FindOneAndUpdateOptions<Item, Item>
+		{
+			IsUpsert = false,
+			ReturnDocument = ReturnDocument.After
+		};
+		var updatedOne= await _context.Items.FindOneAndUpdateAsync(Filter, update, options);
+
+		return updatedOne;
+	}
 }
 

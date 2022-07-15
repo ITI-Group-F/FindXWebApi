@@ -66,7 +66,9 @@ namespace FindX.WebApi.Repositories.Repository
 											{ "fuzzy",
 					new BsonDocument("maxEdits", 1) }
 									} }
-							})
+							}),
+
+					new BsonDocument("$limit", 10)
 				};
 
 			return await _context.Items

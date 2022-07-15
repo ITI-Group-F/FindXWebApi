@@ -79,4 +79,28 @@ public class ItemsController : ControllerBase
         itemDto.ItemPosterFullName = UserFullName;
         return Ok(itemDto);
     }
+
+
+    [HttpGet]
+    [Route("close")]
+    public async Task<ActionResult> ClosePost(Guid id)
+    {
+
+        try
+        {
+            var item = await _itemsRepository.CloseItem(id);
+            if (item is null)
+            {
+                return NotFound();
+            }
+            return Ok();
+        }
+        catch
+        {
+
+            return StatusCode(StatusCodes.Status500InternalServerError);
+        }
+       
+
+    }
 }
