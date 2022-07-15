@@ -83,12 +83,12 @@ public class ItemsController : ControllerBase
 
     [HttpGet]
     [Route("close")]
-    public async Task<ActionResult> ClosePost(Guid id)
+    public async Task<ActionResult> ClosePostAsync(Guid id)
     {
 
         try
         {
-            var item = await _itemsRepository.CloseItem(id);
+            var item = await _itemsRepository.CloseItemAsync(id);
             if (item is null)
             {
                 return NotFound();

@@ -49,7 +49,7 @@ public class ItemsRepository : IItemsRepository
 
 
 
-	public async Task<Item> CloseItem(Guid id)
+	public async Task<Item> CloseItemAsync(Guid id)
 	{
 		var Filter = _filterBuilder.Eq(i => i.Id, id);
 
